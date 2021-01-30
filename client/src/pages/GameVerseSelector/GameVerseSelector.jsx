@@ -70,7 +70,7 @@ const GameVerseSelector = (props)=>
                 {
                     method:"POST",
                     data:newtournamentobj,
-                    url:`${backendurl}/${gameverse}/createtournament`
+                    url:`${backendurl}/superverse/${gameverse}/createtournament`
                 }
             ).then((data)=>
             {
@@ -152,7 +152,7 @@ const GameVerseSelector = (props)=>
             axios({
                 method:"POST",
                 data:obj,
-                url:`${backendurl}/${gameverse}/jointournament`
+                url:`${backendurl}/superverse/${gameverse}/jointournament`
             }).then((data)=>
             {
                 //console.log(data.data);

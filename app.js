@@ -43,7 +43,7 @@ app.use(
     })
   );
 
-  app.use("/",require("./Routes/api/dragonball/routes"));
+  app.use("/superverse",require("./Routes/api/dragonball/routes"));
   //app.use("/",require("./Routes/api/naruto/routes"));
   
 

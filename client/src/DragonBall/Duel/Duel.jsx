@@ -214,7 +214,7 @@ const Duel=(props)=>
             axios({
                 method:"POST",
                 data:data,
-                url:`${backendurl}/dragonball/tournamentwon`
+                url:`${backendurl}/superverse/dragonball/tournamentwon`
             }).then((res)=>
             {
                 console.log(res);
@@ -252,7 +252,7 @@ const Duel=(props)=>
                     tournament_id:Tournament._id,
                     winning_duel_id:DuelObj.duel_id.toString()
                 },
-                url:`${backendurl}/dragonball/duel/nextmatch`
+                url:`${backendurl}/superverse/dragonball/duel/nextmatch`
             }).then((res)=>
             {
                 console.log(res);
@@ -832,7 +832,7 @@ const Duel=(props)=>
         axios({
             method:'POST',
             data:data,
-            url:`${backendurl}/dragonball/duel/updateuser`
+            url:`${backendurl}/superverse/dragonball/duel/updateuser`
         }).then((res)=>
         {
             console.log(res.data);

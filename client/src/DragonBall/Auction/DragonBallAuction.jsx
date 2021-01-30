@@ -230,7 +230,7 @@ const DragonBallAuction =(props)=>
                 axios({
                     method:"POST",
                     data:data,
-                    url:`${backendurl}/dragonball/updateuser/auctiondata`
+                    url:`${backendurl}/superverse/dragonball/updateuser/auctiondata`
                 }).then((data)=>
                 {
                    // console.log("updateduser is : ",data);
@@ -278,7 +278,7 @@ const DragonBallAuction =(props)=>
                     axios({
                         method:"POST",                   
                         data:x,
-                        url:`${backendurl}/dragonball/gettournamentinfo`
+                        url:`${backendurl}/superverse/dragonball/gettournamentinfo`
                     }).then((res)=>
                     {
                         //console.log("UPdaaateedd@@@");
@@ -395,7 +395,7 @@ const DragonBallAuction =(props)=>
                     axios({
                         method:"POST",
                         data:data,
-                        url:`${backendurl}/dragonball/auction/buycharacter`
+                        url:`${backendurl}/superverse/dragonball/auction/buycharacter`
                     }).then((data)=>
                     {   
                         console.log("You Bought : ",data);
