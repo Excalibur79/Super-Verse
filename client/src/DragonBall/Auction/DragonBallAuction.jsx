@@ -8,7 +8,7 @@ import Loader from "../../Components/Loader/Loader";
 import axios from "axios"
 import backendurl from "../../backend_url";
 import io from "socket.io-client";
-const ENDPOINT="localhost:5000";
+const ENDPOINT="https://excalibur-superverse.herokuapp.com/";
 
 
 
