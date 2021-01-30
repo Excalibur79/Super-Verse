@@ -1,0 +1,218 @@
+.InstructionModal
+{
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    //border:4px solid red;
+    width:70rem;
+    background-color:#D9DCDD  ;
+    height:90vh;
+    border-radius:10px;
+
+
+    .Rule_heading 
+    {
+        display:flex;
+        padding:.5rem;
+        background-color:#464948 ;
+        border-radius:10px 10px 0 0;
+        div
+        {
+            //bordeR:2px solid green;
+            padding:.4rem;
+            flex:1;
+            background-color:#464948 ;
+            font-family: 'Poppins', sans-serif;
+            font-size:3rem;
+            color:#BBC6C1 ;
+        }
+        img 
+        {
+            width:5rem;
+            height:5rem;
+            margin-right:1rem;
+            margin-top: .3rem;
+        }
+    }
+    .Scrollable_Content 
+    {
+        overflow-y:scroll;
+        height:80vh;
+        
+        //border:1px solid red;
+
+        &::-webkit-scrollbar 
+        {
+            width: 2rem;
+          }
+           
+          &::-webkit-scrollbar-track 
+          {
+              background-color:transparent;
+            
+          }
+           
+          &::-webkit-scrollbar-thumb 
+          {
+           
+           border-radius:10rem;
+           background-color:rgba(175,135,124,1);
+            cursor:pointer;
+           width:1.5rem;
+          }
+
+    }
+
+    .GameVerse_Rules
+    {
+       // border:2px solid green;
+        padding:.6rem;
+        width:100%;
+        font-family: 'Poppins', sans-serif;
+          
+            color:#464948;
+        div 
+        {
+            display: flex;
+            img 
+            {
+                width:40rem;
+                border-radius:5px;
+                margin:.3rem;
+            }
+            div 
+            {
+                display:flex;
+                flex-direction:column;
+                margin:.3rem;
+            }
+        }
+    }
+    .Auction_Rules
+    {
+        //bordeR:2px solid red;
+        display:flex;
+        flex-direction: column;
+        padding:1rem;
+        //width:100%;
+        font-family: 'Poppins', sans-serif;
+        color:#464948;
+        text-align:center;
+        span 
+              {
+                  color:black;
+                  font-weight: bold;
+                  font-size:1.5rem;
+              }
+        div 
+        {
+           // bordeR:2px solid red;
+            display: flex;
+            justify-content: space-between;
+            div 
+            {
+                text-align:left;
+                display:flex;
+                align-items: center;
+                img 
+                {
+                    width:30rem;
+                    height:20rem;
+                    border-radius:5px;
+                }
+            }
+            div:first-child 
+            {
+                display:flex;
+                flex-direction: column;
+             // background-color: green;
+              width:100%;
+              margin:.3rem;
+              
+            }
+        }
+    }
+
+    .Duel_Rules 
+    {
+       // border:2px solid red;
+       padding:1rem;
+        h1{ font-family: 'Poppins', sans-serif;
+          
+            color:#464948;}
+        .one
+        {
+            text-align:left;
+           // border:2px solid blue;
+            font-weight:bold;
+            font-size:1.5rem;
+            color:black;
+            font-family: 'Poppins', sans-serif;
+          
+
+        }
+        .Duel_Image_div
+        {
+            //bordeR:2px solid black;
+           .Duel_Image 
+           {
+               width:50rem;
+               border-radius:5px;
+           }
+        }
+    }
+}
+
+.animated-button
+{
+    cursor:pointer;
+    transition: all .3s ease;
+    &:hover 
+    {
+        transform: scale(1.05) ;
+        filter: brightness(1.05);
+    }
+    &:active 
+    {
+        transform: scale(.8) ;
+        filter: brightness(.8);
+    }
+}
+.fade-in 
+{
+    animation-name:fade-in;
+    animation-duration:.5s;
+    animation-fill-mode: forwards;
+}
+.margin-top-small 
+{
+    margin-top:.5rem;
+}
+.margin-bottom-small
+{
+    margin-bottom:1.6rem;
+}
+
+ul 
+{
+    li 
+    {
+        margin:1.5rem;
+        margin-left: 2rem;
+        list-style-type: circle;
+       
+    }
+}
+
+@keyframes fade-in
+{
+    0%{
+        opacity:0;
+        
+    }
+    100%{
+        opacity:1;
+        
+    }
+}

@@ -1,0 +1,629 @@
+.Duel_page 
+{
+   // border:2px solid red;
+    width:100vw;
+    height: 100vh;
+    position:relative;
+    background-size: cover;
+   // background-image:url(../../assets/images/dbarena.jpg);
+  // background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+
+    .Duel_Alert
+    {
+        z-index:99999;
+        padding:1rem;
+       // border:2px solid black;
+        position:absolute;
+        top:5%;
+        left:50%;
+        transform:translate(-50%,0);
+        width:fit-content;
+    }
+    
+    .Result 
+    {
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+       // border:2px solid red;
+        background-color:rgba(224, 231, 227 ,.9);
+        z-index:999;
+        .Result_Info 
+        {
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform: translate(-50%,-50%);
+            background-color:#464948 ;
+            font-family: 'Poppins', sans-serif;
+            font-size:2rem;
+            color:#BBC6C1 ;
+            border-radius:10px;
+            
+            div 
+            {
+                margin:1rem;
+                padding:.5rem;
+                text-align:center;
+                padding-left:3rem;
+                padding-right:3rem;
+                img
+                {
+                    width:5rem;
+                    height:5rem;
+                    border-radius:50%;
+                }
+            }
+        }
+        .victory
+        {
+            color:lime;
+        }
+        .lost
+        {
+            color:red;
+        }
+    }
+    .Super_Verse_heading 
+    {
+        position:absolute;
+        top:10%;
+        left:50%;
+        transform: translate(-50%,-50%);
+        letter-spacing:.3rem;
+        //  font-family: 'Big Shoulders Stencil Text', cursive;
+           font-family: 'Orbitron', sans-serif;
+           cursor:pointer;
+        span:first-child 
+        {
+            color:orange;
+            font-size:5rem;
+        }
+        span:last-child 
+        {
+            color:blue;
+            font-size:5rem;
+        }
+    }
+    .Tournament_Tree_two 
+    {
+      //  border:2px solid green;
+        width:50rem;
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%,-50%);
+       .firstlevel
+       {
+           text-align:center;
+            img {
+                width:10rem;
+                //border-radius:50%;
+                
+            }
+       }
+       .secondlevel 
+       {
+         height:10rem;
+         width:.4rem;
+         background-color:#464948 ;
+         margin:0 auto;
+       }
+       .thirdlevel
+       {
+            margin:0 auto;
+            height:10rem;
+            border-right:4px solid  #464948;
+            border-left:4px solid#464948;
+            border-top:4px solid  #464948;
+            width:30rem;
+          
+       }
+       .fourthlevel
+       {
+            //border:2px solid blue;
+            display:flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            img 
+            {
+                border-radius:50%;
+                width:10rem;
+                border:4px solid #BBC6C1; 
+            }
+            img:first-child
+            {
+                margin-left:5rem;
+            }
+            img:last-child 
+            {
+                margin-right:5rem;
+            }
+       }
+    }
+
+
+    .Duel-Area 
+    {
+        
+        .Players-Details 
+        {
+            display:flex;
+        
+            justify-content: space-between;
+           // border:2px solid green;
+            flex-direction:row;
+
+              .My_Deck 
+                {
+                   // border:2px solid red;
+                    position:absolute;
+                    left:50%;
+                    top:5%;
+                    transform:translate(-50%,0);
+                   // width:50rem;
+                   display:flex;
+                   max-width:40rem;
+                   flex-wrap:wrap;
+
+                    img 
+                    {
+                        height:5rem;
+                        width:5rem;
+                        border-radius:50%;
+                        margin:.6rem;
+                        background-color:white;
+                        border:1px solid gold;
+                    }
+                }
+
+
+            .opponent 
+            {
+                //border:2px solid red;
+               padding-left:10rem;
+               position:relative;
+                .name_n_focus
+                {
+                   // border:2px solid blue;
+                  
+                  
+                   padding:.3rem;
+                    font-size:3rem;
+                    font-weight:bold;
+                   
+                    font-family: 'Lato', sans-serif;
+                    color:black;
+                    display:flex;
+                    justify-content: space-between;
+
+
+
+                   .focuspoints 
+                    {
+                       // border:2px solid red;
+                       // width:fit-content;
+                        //display: inline-block;
+                        font-family: 'Poppins', sans-serif;
+                        font-size:2rem;
+                        color:#464948  ;
+                        text-align:center;
+                        cursor:pointer;
+                        display:flex;
+                        div
+                        {
+                            margin:.6rem;
+                            margin-top:1.3rem;
+                        }
+                        div:first-child 
+                        {
+                           // border:2px solid red;
+                        }
+                       
+                        .gold_circle 
+                        {
+                            width:2.5rem;
+                            height:2.5rem;
+                            background-color:gold;
+                            border-radius:50%;
+                            border:2px solid white;
+                            display:inline-block;
+                            margin-top:1.6rem;
+                            transition:all .3s ease;
+                            &:hover 
+                            {
+                                transform:scale(1.05);
+                            }
+                            &:active
+                            {
+                                transform: scale(.8);
+                            }
+                           
+                            
+                        }
+                    }       
+       
+                }
+                .details 
+                {
+                    display:flex;
+                    justify-content: space-between;
+                   // border:2px solid black;
+                    img 
+                    {
+                        width:6rem;
+                        height:6rem;
+                        border-radius:50%;
+                        border:3px solid white;
+                        margin:.3rem;
+                    }
+                    #opponent_healthbar
+                    {
+                        width:30rem;
+                        height:2rem;
+                        border:2px solid #f46b45;
+                        border-radius: 5px;;
+                        margin:.3rem;
+                        margin-top:2rem;
+                        #opponent_health 
+                        {
+                            height:100%;
+                           background:linear-gradient(to right,#00C9FF,#92FE9D);
+                            border-radius:5px;
+                        }
+                    }
+                }
+                .focuspoints 
+                {
+
+                }
+                .Health_Number 
+                {
+                    span 
+                    {
+                        color:black;
+                        font-weight: bold;
+                    }
+                     //border:2px solid red;
+                    position:absolute;
+                    left:35%;
+                    top:90%;
+                    font-size:2.8rem;
+                    color:#464948  ;
+                    font-family: 'Poppins', sans-serif;
+
+
+                }
+            }
+            .Me 
+            {
+                padding-right:10rem;
+               // border:2px solid black;
+                position:relative;
+                .name_n_focus
+                {
+                   // border:2px solid blue;
+                    
+                    padding:.3rem;
+                    font-size:3rem;
+                    font-weight:bold;
+                   
+                    font-family: 'Lato', sans-serif;
+                    color:black;
+                    display:flex;
+                    justify-content: space-between;
+
+                    .focuspoints 
+                    {
+                       // border:2px solid red;
+                       // width:fit-content;
+                        //display: inline-block;
+                        font-family: 'Poppins', sans-serif;
+                        font-size:2rem;
+                        color:#464948  ;
+                        text-align:center;
+                        cursor:pointer;
+                        display:flex;
+                        div
+                        {
+                            margin:.6rem;
+                            margin-top:1.3rem;
+                        }
+                        div:first-child 
+                        {
+                           // border:2px solid red;
+                        }
+                       
+                        .gold_circle 
+                        {
+                            width:2.5rem;
+                            height:2.5rem;
+                            background-color:gold;
+                            border-radius:50%;
+                            border:2px solid white;
+                            display:inline-block;
+                            margin-top:1.6rem;
+                            transition:all .3s ease;
+                            &:hover 
+                            {
+                                transform:scale(1.05);
+                            }
+                            &:active
+                            {
+                                transform: scale(.8);
+                            }
+                           
+                            
+                        }
+                    }       
+        
+                }
+                .details 
+                {
+                    display:flex;
+                    justify-content: space-between;
+                    //border:2px solid black;
+                    img 
+                    {
+                        width:6rem;
+                        height:6rem;
+                        border-radius:50%;
+                       // border:2px solid red;
+                       border:3px solid white;
+                        margin:.3rem;
+                    }
+                    #my_healthbar
+                    {
+                        width:30rem;
+                        height:2rem;
+                        border:2px solid #00C9FF;
+                        border-radius: 5px;;
+                      
+                        margin:.3rem;
+                        margin-top:2rem;
+                        #my_health 
+                        {
+                            height:100%;
+                            background:linear-gradient(to right,#f46b45,#eea849);
+                           
+                            border-radius: 5px;;
+                        }
+                    }
+                }
+                .Health_Number 
+                {
+                    span 
+                    {
+                        color:black;
+                        font-weight: bold;
+                    }
+                     //border:2px solid red;
+                    position:absolute;
+                    left:15%;
+                    top:90%;
+                    font-size:2.8rem;
+                    color:#464948  ;
+                    font-family: 'Poppins', sans-serif;
+
+
+                }
+                
+                       
+            }
+        }
+
+        .Fight_Zone 
+        {
+            //border:2px solid green;
+            display:flex;
+            justify-content: space-between;
+            margin-top:2.5rem;
+            .Opponent_Zone 
+            {
+                padding:1rem;
+                height:60rem;
+                width:60rem;
+                border-radius:50%;
+                transform:scale(.8);
+                padding-top:4rem;
+                position:relative;
+                
+            }
+            .Select_Character 
+            {
+               
+                //border:2px solid green;
+                display: flex;
+                flex-direction:column;
+                justify-content: center;
+                div
+                {
+                    display:flex;
+                   // border:2px solid purple;
+                    .Left 
+                    {
+                       img 
+                       {
+                           width:4rem;
+                           height:4rem;
+                           cursor:pointer;
+                           transition: all .3s ease;
+                           &:hover 
+                           {
+                               transform:scale(1.05);
+                           }
+                           &:active
+                           {
+                               transform: scale(.8);
+                           }
+                       }
+                    }
+                    .Right 
+                    {
+                        transform:rotate(180deg);
+                        img 
+                       {
+                           width:4rem;
+                           height:4rem;
+                           cursor:pointer;
+                           transition: all .3s ease;
+                           &:hover 
+                           {
+                               transform:scale(1.05) ;
+                           }
+                           &:active
+                           {
+                               transform: scale(.8) ;
+                           }
+                       }
+                    }
+                    div 
+                    {
+                       // border:2px solid blue;
+                        display: flex;
+                        flex-direction:column;
+                        justify-content: center;
+                       
+                    }
+                    .My_Character 
+                    {
+                        div
+                        {
+                               
+                               
+                                 img 
+                                {
+                                    width:20rem;
+                                    height:25rem;
+                                    filter:brightness(1.09);
+                                }
+                            
+                        }
+                    }
+                    
+                }
+              
+            }
+            .My_Zone 
+            {
+               padding:1rem;
+               height:60rem;
+               width:60rem;
+               border-radius:50%;
+               transform:scale(.8);
+               padding-top:4rem;
+            }
+            .attack 
+            {
+              
+               box-shadow: 0px 0px 0px 4rem #E1481F inset;
+               transition:all .3s ease;
+               cursor:pointer;
+               &:hover 
+               {
+                   box-shadow:  0px 0px 0px 10rem #E1481F  inset;
+                   filter:brightness(1.08);
+               }
+               &:active 
+               {
+                    box-shadow:0px 0px 0px 20rem #4C3D39  inset;
+               }
+            }
+            .defence 
+            {
+                box-shadow: 0px 0px 0px 4rem #0BADF1   inset;
+               transition:all .3s ease;
+               cursor:pointer;
+               &:hover 
+               {
+                   box-shadow:  1px 1px 1px 10rem #0BADF1   inset;
+                   filter:brightness(1.08);
+               }
+               &:active 
+               {
+                    box-shadow:0px 0px 0px 20rem #4C3D39  inset;
+               }
+              
+            }
+            .placed 
+            {
+                box-shadow:0px 0px 0px 0rem #2ECC71   inset;
+                //border:1rem dashed #2ECC71 ;
+                animation-name:placed;
+                animation-duration:.5s;
+                animation-fill-mode: forwards;
+            }
+
+        }
+        
+    }
+   
+
+}
+
+
+
+
+.Next_Button
+{
+    background-color:#464948 ;
+    font-family: 'Poppins', sans-serif;
+    font-size:2rem;
+    color:#BBC6C1 ;
+    width:20rem;
+    padding:1rem;
+    border-radius: 10px;
+    
+    text-align:center;
+    margin:0 auto;
+    transition:all .3s ease;
+    cursor:pointer;
+    &:hover {transform:scale(1.06);filter:brightness(1.06)}
+    &:active{transform:scale(.9);filter:brightness(.9)}
+    
+}
+
+.opponent_placed
+{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    background-color:#464948 ;
+    font-family: 'Poppins', sans-serif;
+    font-size:2rem;
+    color:#BBC6C1 ;
+                
+
+    border-radius:10px;
+
+    div 
+    {
+        margin:1rem;
+        padding:.5rem;
+        text-align:center;
+        img
+        {
+            width:6rem;
+            height:6rem;
+        }
+    }
+}
+.Center 
+{
+    position:absolute;
+   // border:2px solid red;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+}
+//Animations
+@keyframes placed 
+{
+    100%{
+        box-shadow:0px 0px 0px 20rem #2ECC71   inset;
+    }
+}
+//==========

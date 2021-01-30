@@ -1,0 +1,52 @@
+.Alert 
+{
+   // border:2px solid red;
+    padding:1rem;
+    font-size:2.5rem;
+    border-radius:10px;
+    font-family: 'Poppins', sans-serif;
+    z-index:9999;
+
+}
+.red 
+{
+    background-color:#F1948A ;
+    color:#C0392B ;
+   
+}
+.green 
+{
+    background-color: #82E0AA ;
+    color:green;
+}
+
+.yellow 
+{
+    background-color: #F9F810 ;
+    color:#B7950B;
+}
+.animated 
+{
+    animation-name:alert;
+    animation-duration:3s;
+   animation-fill-mode:forwards;
+}
+@keyframes alert 
+{
+    0%{
+
+        opacity:0;
+    }
+    10%{
+        opacity: 1;
+    }
+    50%{
+        opacity:1;
+    }
+    76%{
+        opacity: 1;
+    }
+    100%{
+        opacity:0;
+    }
+}

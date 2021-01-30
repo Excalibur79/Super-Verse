@@ -1,0 +1,26 @@
+.Loader
+{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    background-color:#464948 ;
+    font-family: 'Poppins', sans-serif;
+    font-size:2rem;
+    color:#BBC6C1 ;
+                
+
+    border-radius:10px;
+
+    div 
+    {
+        margin:1rem;
+        padding:.5rem;
+        text-align:center;
+        img
+        {
+            width:6rem;
+            height:6rem;
+        }
+    }
+}
