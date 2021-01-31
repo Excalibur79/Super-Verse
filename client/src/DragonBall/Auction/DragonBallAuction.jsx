@@ -317,6 +317,7 @@ const DragonBallAuction =(props)=>
             Socket.on("updateauctionnextcharacter",(data)=>
             {
                 setAuctionObj(data.data);
+                setbidvalue(data.data.presentcharacter.base_price);
                 resettimer();
             })
             Socket.on('finishauction',(data)=>
