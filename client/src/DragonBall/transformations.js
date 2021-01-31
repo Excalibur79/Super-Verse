@@ -365,7 +365,7 @@ var transformationarray=[
     },
     {
         name: "Gohan SSJ2",
-        url: "https://res.cloudinary.com/dvs0u47yi/image/upload/v1611751063/Optimized%20images/Transformations/GohanSSJ1_gs2rdi.png",
+        url: "https://res.cloudinary.com/dvs0u47yi/image/upload/v1611751063/Optimized%20images/Transformations/GohanSSJ2_ipfzwq.png",
         theme: "rgba(132,140,196,1)",
         attack: 77,
         defence: 75,
