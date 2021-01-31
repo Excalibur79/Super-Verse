@@ -23,7 +23,7 @@ const GameVerseSelector = (props)=>
     const [joiningid,setjoiningid]=useState("");
     const [isLoading,setisLoading]=useState(false);
     const [invalidwidth,setinvalidwidth]=useState(false);
-    const [width,setwidth]=useState(1200);
+    const [width,setwidth]=useState(window.innerWidth);
 
     const [showinstructionmodal,setshowinstructionmodal]=useState(false);
 

@@ -155,7 +155,7 @@ router.post("/dragonball/jointournament",async (req,res)=>
       
             var tournament=await DragonBall_Tournament.findById(ObjectId(data.joiningid));
 
-            if(tournament.auction.length==tournament.type)
+            if(tournament.auction.length===tournament.type)
                 return res.status(500).send("Game Filled!");
 
             tournament.auction.push(ObjectId(data.userdata._id));
@@ -234,7 +234,7 @@ router.post("/dragonball/updateuser/auctiondata",async (req,res)=>
             OngoingTournament:true,
             Ongoing_Tournament_id:data.tournament._id,
             Focus_Points:0,
-            Account_Balance:20000000
+            Account_Balance:30000000
         },{new:true});
 
         //var user=await User.findById(ObjectId(data.userdata._id));
