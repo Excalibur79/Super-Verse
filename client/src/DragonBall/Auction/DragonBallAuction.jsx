@@ -236,6 +236,14 @@ const DragonBallAuction =(props)=>
     
     useEffect(()=>
     {
+        if(timerid == null)
+        {
+            settimeleft(15);
+        }
+    },[timerid])
+
+    useEffect(()=>
+    {
         if(Socket!==null)
         {
           //  console.log(Socket);
