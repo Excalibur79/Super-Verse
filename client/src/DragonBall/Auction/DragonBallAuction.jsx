@@ -169,7 +169,7 @@ const DragonBallAuction =(props)=>
             if(bidvalue>AuctionObj.priceofcharacter)
             {
                 if(timeleft>2)
-                {
+                {  
                     var investor;
                     for(var i=0;i<AuctionObj.members.length;i++)
                     {
