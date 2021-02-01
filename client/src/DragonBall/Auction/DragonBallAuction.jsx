@@ -135,7 +135,9 @@ const DragonBallAuction =(props)=>
                  
             }
             time=time-1;
-            settimeleft(time);
+
+            if(time>=0)
+             settimeleft(time);
         },1000)
     }
 
@@ -166,7 +168,7 @@ const DragonBallAuction =(props)=>
         {
             if(bidvalue>AuctionObj.priceofcharacter)
             {
-                if(timeleft>2 || timeleft<-3)
+                if(timeleft>2)
                 {
                     var investor;
                     for(var i=0;i<AuctionObj.members.length;i++)
