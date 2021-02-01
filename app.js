@@ -242,7 +242,7 @@ io.on("connection",async (socket)=>
       {
         obj.characterindex++;
         obj.presentcharacter=obj.charactersarray[obj.characterindex];
-        obj.investor.splice(0,1);
+        obj.investor=[];
         obj.priceofcharacter=obj.presentcharacter.base_price - 1;
         
         /*var auctionarray=getauctionarray();
