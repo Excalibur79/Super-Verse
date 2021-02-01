@@ -117,20 +117,19 @@ const DragonBallAuction =(props)=>
     const triggertimer=()=>
     {
         var time=15;
-        var id=setInterval(()=>
+        settimerid(setInterval(()=>
         {
-            if(time==15)
+            /*if(time==15)
             {
                 settimerid(id);
-            }
+            }*/
             if(time<0)
             {
-                clearInterval(id);
-                if(timerid===id)
-                {
+                clearInterval(timerid);
+                
                     settimerid(null);
                     settimeleft(15);
-                }
+                
                
                  
             }
@@ -138,7 +137,7 @@ const DragonBallAuction =(props)=>
 
             if(time>=0)
              settimeleft(time);
-        },1000)
+        },1000))
     }
 
     const nextcharacter=()=>
