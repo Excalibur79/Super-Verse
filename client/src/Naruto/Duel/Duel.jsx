@@ -65,7 +65,6 @@ const Duel=(props)=>
     var arr1=[];var arr2=[];
 
 
-
     const [opponentrestore,setopponentrestore]=useState({
         array:[],
         value:0
@@ -75,7 +74,6 @@ const Duel=(props)=>
         array:[],
         value:0
     })
-
     //======
 
     /*useEffect(()=>//Configuring keypress events
@@ -109,7 +107,7 @@ const Duel=(props)=>
 
            // console.log("Start Match");
 
-           MySocket.on('resetted',(data)=>
+           MySocket.on('narutoresetted',(data)=>
            {
              setfight(false);
               // console.log("resetted",data.data);
@@ -145,7 +143,7 @@ const Duel=(props)=>
            })
 
 
-           MySocket.on('attacked',(data)=>
+           MySocket.on('narutoattacked',(data)=>
            {
                var res=data.data;
              
@@ -163,7 +161,7 @@ const Duel=(props)=>
               
            })
 
-           MySocket.on('defended',(data)=>
+           MySocket.on('narutodefended',(data)=>
            {
                var res=data.data;
               
@@ -179,9 +177,9 @@ const Duel=(props)=>
            })
 
             
-            MySocket.on('fight',()=>setfight(true));
+            MySocket.on('narutofight',()=>setfight(true));
 
-            MySocket.on('iwon',()=>
+            MySocket.on('narutoiwon',()=>
             {
                
                 //console.log(isFinalMatch?"This is the last match":"Not Final Match");
@@ -228,7 +226,7 @@ const Duel=(props)=>
             axios({
                 method:"POST",
                 data:data,
-                url:`${backendurl}/superverse/dragonball/tournamentwon`
+                url:`${backendurl}/superverse/naruto/tournamentwon`
             }).then((res)=>
             {
                 console.log(res);
@@ -266,7 +264,7 @@ const Duel=(props)=>
                     tournament_id:Tournament._id,
                     winning_duel_id:DuelObj.duel_id.toString()
                 },
-                url:`${backendurl}/superverse/dragonball/duel/nextmatch`
+                url:`${backendurl}/superverse/naruto/duel/nextmatch`
             }).then((res)=>
             {
                 console.log(res);
@@ -318,7 +316,7 @@ const Duel=(props)=>
         if(MySocket)
         {
           
-            MySocket.on('startmatch',(data)=>
+            MySocket.on('narutostartmatch',(data)=>
             {
                 setiwon(false);
                 setDuelObj(data.data);
@@ -427,7 +425,7 @@ const Duel=(props)=>
             if(myobj.deck.length==0)
             {
 
-                MySocket.emit('lostduel',{duel_id:DuelObj.duel_id});
+                MySocket.emit('lostnarutoduel',{duel_id:DuelObj.duel_id});
                 var resultdata={
                     message1:'YOU LOST!',
                     message2:'You lost the Tournament!',
@@ -471,8 +469,8 @@ const Duel=(props)=>
                      if(damage<=16)//Increasing Focus Points
                     {
                         y.focuspoints++;
-                        var as=document.getElementById('ability_sound');
-                        as.play();
+                       /* var as=document.getElementById('ability_sound');
+                        as.play();*/
 
                         setalertdata({
                             message:"Got 1 Ability Point",
@@ -500,7 +498,7 @@ const Duel=(props)=>
                     {
                         //Make the opponent winner 
                        
-                        MySocket.emit('lostduel',{duel_id:DuelObj.duel_id});
+                        MySocket.emit('lostnarutoduel',{duel_id:DuelObj.duel_id});
                        // alert("You Lost!");
 
                         //setting result
@@ -542,7 +540,7 @@ const Duel=(props)=>
                             }
                         }
                        // console.log('before reset data is : ',data);
-                        MySocket.emit('reset',data);
+                        MySocket.emit('narutoreset',data);
     
                     }
                   
@@ -618,6 +616,47 @@ const Duel=(props)=>
         }
     },[mycharacterplaced,mymove])
 
+
+    useEffect(()=>
+    {
+        if(DuelOngoing && DuelObj)
+        {
+            if(!DuelObj.final_match)
+            {
+                var battle_theme_1=document.getElementById('battle_theme_1');
+               // console.log(battle_theme_1);
+                if(battle_theme_1)
+                {
+                    battle_theme_1.volume = 0.4;
+                    battle_theme_1.play();
+                }
+            }
+            else
+            {
+
+                var battle_theme_1=document.getElementById('battle_theme_1');
+               // console.log(battle_theme_1);
+                if(battle_theme_1)
+                {
+                    battle_theme_1.pause();
+                    battle_theme_1.currentTime=0;
+                   // battle_theme_1.volume = 0.4;
+                    
+                }
+
+                var battle_theme_2=document.getElementById('battle_theme_2');
+               // console.log(battle_theme_2);
+                if(battle_theme_2)
+                {
+                    battle_theme_2.volume = 0.4;
+                    battle_theme_2.play();
+                }
+            }
+        }
+    },[DuelOngoing])
+
+
+
     useEffect(()=>
     {
         if(myobj && opponentobj)
@@ -625,7 +664,8 @@ const Duel=(props)=>
             var myregeneratepoints=Math.floor(myobj.focuspoints/3);
             var opponentregeneratepoints=Math.floor(opponentobj.focuspoints/3);
             
-             arr1=[];arr2=[];
+             arr1=[];
+             arr2=[];
             for(var i=0;i<myregeneratepoints;i++)
                 arr1.push(i);
             for(var i=0;i<opponentregeneratepoints;i++)
@@ -694,12 +734,12 @@ const Duel=(props)=>
                 if(mymove=='attack')
                 {
                   //  console.log('attacking now ',data);
-                        MySocket.emit('attack',data);
+                        MySocket.emit('narutoattack',data);
                 }
                 else if(mymove=='defend')
                 {
                    // console.log('defending now : ',data);
-                    MySocket.emit('defend',data);
+                    MySocket.emit('narutodefend',data);
                 }
            }
            else 
@@ -775,9 +815,19 @@ const Duel=(props)=>
                             settransforming(true);
                             //transform sound
                             var ts=document.getElementById('transform_sound');
-                            if(ts)
+                            var bgmusic;
+                            if(isFinalMatch)
+                            {
+                                bgmusic=document.getElementById('battle_theme_2');
+                            }
+                            else
+                            {
+                                bgmusic=document.getElementById('battle_theme_1');
+                            }
+                            if(ts && bgmusic)
                             {
                                 //console.log(ts);
+                                bgmusic.volume=0.2;
                                 ts.play();
                             }
                             //===============
@@ -785,6 +835,8 @@ const Duel=(props)=>
                             setTimeout(()=>
                             {
                                 //console.log(nextcharacter);
+                               
+
                                 var copiedmyobj=clone(myobj);
                                 var finalhealth;
                                 var finalplayerhealth;
@@ -826,12 +878,23 @@ const Duel=(props)=>
                                     shown:true,
                                     type:'yellow'
                                 })
-                            },1500)
+                            },2000)
                            
+                            setTimeout(()=>
+                            {
+                                if(bgmusic)
+                                bgmusic.volume=0.4;
+                            },5000)
                         }
                            
                         else
-                            alert("Wierd ! Not Found");
+                            {
+                                setalertdata({
+                                    message:`Wierd Not Found!`,
+                                    shown:true,
+                                    type:'red'
+                                })
+                            }
                     }
                     else 
                     {
@@ -864,8 +927,6 @@ const Duel=(props)=>
         }
       
     }
-
-
 
 
     const regeneratehealth=()=>
@@ -938,7 +999,6 @@ const Duel=(props)=>
         }
     }
 
-
     const setupmatch=(data,player)=>
     {
         //Axios Request setting onging duel id in user==
@@ -946,7 +1006,7 @@ const Duel=(props)=>
         axios({
             method:'POST',
             data:data,
-            url:`${backendurl}/superverse/dragonball/duel/updateuser`
+            url:`${backendurl}/superverse/naruto/duel/updateuser`
         }).then((res)=>
         {
             console.log(res.data);
@@ -955,9 +1015,9 @@ const Duel=(props)=>
 
                 //Calculating Total Health====
                 var sum=0;
-                for(var i=0;i<User.Ongoing_DragonBall_Deck.length;i++)
+                for(var i=0;i<User.Ongoing_Naruto_Deck.length;i++)
                 {
-                    sum=sum+User.Ongoing_DragonBall_Deck[i].health;
+                    sum=sum+User.Ongoing_Naruto_Deck[i].health;
                 }
                 //============================
             var obj={
@@ -969,8 +1029,8 @@ const Duel=(props)=>
                     avatar:User.avatar,
                     uid:User.uid,
                     mongoid:User._id,
-                    deck:User.Ongoing_DragonBall_Deck,
-                    chosencharacter:User.Ongoing_DragonBall_Deck[0],
+                    deck:User.Ongoing_Naruto_Deck,
+                    chosencharacter:User.Ongoing_Naruto_Deck[0],
                     chosencharacterindex:0,
                     focuspoints:User.Focus_Points,
                    totalhealth:sum,
@@ -981,7 +1041,7 @@ const Duel=(props)=>
                 final_match:data.final_match
             }
 
-            MySocket.emit('joindragonballduel',obj);
+            MySocket.emit('joinnarutoduel',obj);
             //===================
 
         }).catch((err)=>
@@ -1047,6 +1107,16 @@ const Duel=(props)=>
                 <div>
                     {isLoading && <Loader data="Waiting For Opponent!"/>}
                     {alertdata.shown && <div className="Duel_Alert"><Alert alertdata={alertdata} resetalert={resetalert}/></div>}
+
+                    <audio id="battle_theme_1" preload='metadata' loop>
+                        <source src="https://res.cloudinary.com/drolmjcot/video/upload/v1612341937/audio/shippudenmaintheme_gizcma.mp3" type="audio/mpeg"/>
+                    </audio>
+
+                    <audio id="battle_theme_2" preload='metadata' loop>
+                        <source src="https://res.cloudinary.com/drolmjcot/video/upload/v1612343939/audio/emergenceoftalent_nbrv5j.mp3" type="audio/mpeg"/>
+                    </audio>
+
+
                     {result.shown && 
                     <div className="Result">
                         <div className="Result_Info">
@@ -1118,8 +1188,8 @@ const Duel=(props)=>
                                    <span>HP : </span> {opponentobj.playerhealth}
                                 </div>
 
-                                <div className="Senzu_Bean_div">
-                                    {opponentrestore.array.map(()=> <div><img src="https://res.cloudinary.com/drolmjcot/image/upload/q_auto:eco/v1612515973/senzu_bean_ptpqfp.png"/></div>)}
+                                <div className="Chakra_Points_div">
+                                    {opponentrestore.array.map(()=> <div><img src="https://res.cloudinary.com/drolmjcot/image/upload/q_auto:eco/v1612346052/chakra_aeej3l.png"/></div>)}
                                 </div>
                                
                             </div>
@@ -1138,9 +1208,10 @@ const Duel=(props)=>
                                 <div className="Health_Number">
                                    <span>HP : </span> {myobj.playerhealth}
                                 </div>
-                                <div className="Senzu_Bean_div">
-                                    {myrestore.array.map(()=> <div onClick={regeneratehealth}><img src="https://res.cloudinary.com/drolmjcot/image/upload/q_auto:eco/v1612515973/senzu_bean_ptpqfp.png"/></div>)}
+                                <div className="Chakra_Points_div">
+                                    {myrestore.array.map(()=> <div onClick={regeneratehealth}><img src="https://res.cloudinary.com/drolmjcot/image/upload/q_auto:eco/v1612346052/chakra_aeej3l.png"/></div>)}
                                 </div>
+                               
                                
                             </div>
                         </div>}
@@ -1166,12 +1237,15 @@ const Duel=(props)=>
                         {myobj.deck.length>0 && opponentobj.deck.length>0 && <div className="Fight_Zone">
                             
                             <audio id="transform_sound">
-                                <source src={transformationsound} type="audio/mpeg"/>
+                                <source src="https://res.cloudinary.com/drolmjcot/video/upload/v1612517644/audio/transformation_bx73zz_mp3cut.net_d4d4kv.mp3" type="audio/mpeg"/>
                             </audio>
 
                             <audio id="ability_sound">
                                 <source src={abilitypoints} type="audio/mpeg"/>
                             </audio>
+
+                           
+
 
                             <div  className={mymove=='attack'?"Opponent_Zone defence":"Opponent_Zone attack"}  >
 

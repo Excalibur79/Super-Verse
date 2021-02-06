@@ -293,23 +293,24 @@
                     font-size:2.8rem;
                     color:#464948  ;
                     font-family: 'Poppins', sans-serif;
+                   
 
 
                 }
-                .Senzu_Bean_div 
+                .Chakra_Points_div 
                 {
                     position:absolute;
                    // border:2px solid green;
-                    top:88%;
+                    top:97%;
                     left:60%;
                     display:flex;
                     div 
                     {
-                        margin-left:0rem;
+                        margin-left:.3rem;
                         img 
                         {
-                            width:5rem;
-                            height:5rem;
+                            width:3rem;
+                            height:3rem;
                         }
                       
                     }
@@ -428,21 +429,20 @@
 
 
                 }
-                .Senzu_Bean_div 
+                .Chakra_Points_div 
                 {
                     position:absolute;
-                    //border:2px solid green;
-                    top:88%;
+                   // border:2px solid green;
+                    top:97%;
                     left:39%;
                     display:flex;
                     div 
                     {
-                        margin-left:0rem;
-                      //  border:2px solid green;
+                        margin-left:.3rem;
                         img 
                         {
-                            width:5rem;
-                            height:5rem;
+                            width:3rem;
+                            height:3rem;
                         }
                         cursor:pointer;
                         transition:all .3s ease;
@@ -456,7 +456,6 @@
                         }
                     }
                 }
-                
                 
                        
             }

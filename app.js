@@ -24,6 +24,18 @@ const {
     updatedragonballduelarray
 }=require("./helpers/dragonball/helper");
 
+
+const {
+  narutoauctionobjpresent,
+  getnarutoauctionarray,
+  updatenarutoauctionarray,
+
+  
+    getnarutoduelarray,
+    narutoduelobjpresent,
+    updatenarutoduelarray
+}=require('./helpers/naruto/helper');
+
 //==============================
 
 
@@ -44,6 +56,7 @@ app.use(
   );
 
   app.use("/superverse",require("./Routes/api/dragonball/routes"));
+  app.use('/superverse',require("./Routes/api/naruto/routes"));
   //app.use("/",require("./Routes/api/naruto/routes"));
   
 
@@ -127,6 +140,8 @@ io.on("connection",async (socket)=>
   //socket.emit("nani",{data:socket.id});
   //console.log(socket.id);
   console.log("A socket Connection has been made : ",socket.id);
+
+  //DragonBall==================================================================================================================
 
   socket.on("joinauction",async (data,cb)=>
   {
@@ -463,8 +478,362 @@ io.on("connection",async (socket)=>
 
     
   })
-  //=========================================
+  //DragonBall===================================================================================================================
   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  //====================================================Naruto====================================================================
+  socket.on('joinnarutoauction',async (data)=>
+  {
+    console.log("yaaaay!!!");
+    var obj=narutoauctionobjpresent(data.auction_id);
+    var userobj=
+    {
+        name:data.name,
+        avatar:data.avatar,
+        uid:data.uid,
+        mongoid:data.mongoid,
+        socketid:socket.id,
+        charactersarray:[],
+        votedtoendauction:false
+        
+    }
+    if(!obj)
+    {
+      var narutoauctionarray=getnarutoauctionarray();
+      var narutocharacters=await Naruto_Character.find({});
+       //Durstenfeld Shuffle algorithm
+
+        var shufflearr=[...narutocharacters];
+        for(var i =shufflearr.length-1;i>0;i--)
+        {
+          var j=Math.floor(Math.random()*(i+1));
+          var temp=shufflearr[i];
+          shufflearr[i]=shufflearr[j];
+          shufflearr[j]=temp;
+        }
+
+       //=============================
+        var newauction=
+        {
+          auction_id:data.auction_id,
+          type:data.type,
+          gameverse:data.gameverse,
+          charactersarray:shufflearr,
+          members:[userobj],
+          presentcharacter:shufflearr[0],
+          characterindex:0,
+          priceofcharacter:shufflearr[0].base_price-1,
+          investor:[],
+          finishcounter:0
+        }
+        narutoauctionarray.push(newauction);
+        updatenarutoauctionarray(narutoauctionarray);
+        socket.join(data.auction_id);
+        io.to(data.auction_id).emit("updatenarutoauction",{data:newauction});
+
+
+       //console.log("Tournament Created and tournament array is : ",getauctionarray());
+    }
+    else
+    {
+        if(obj.members.length!==obj.type)
+        {
+          var userismember=obj.members.find((member)=>data.mongoid==member.mongoid);
+          if(!userismember)
+          {
+             obj.members.push(userobj);
+             socket.join(data.auction_id);
+             io.to(data.auction_id).emit("updatenarutoauction",{data:obj});
+             if(obj.members.length==obj.type)
+               io.to(data.auction_id).emit("triggernarutoauction",{data:obj});
+            
+           // console.log("User Joined the tournament and the tournament array is : ",getauctionarray());
+          }
+        }
+        else
+          console.log("Tournament Full !!");
+    }
+  })
+
+  socket.on("narutobid",async (data)=>
+  {
+    //console.log(data);
+    var obj=narutoauctionobjpresent(data.auction_id);
+    if(obj)
+    {
+      obj.priceofcharacter=data.bidprice;
+      if(obj.investor.length==0)
+      {
+        obj.investor.push(data.investor);
+      }
+      else
+      {
+        obj.investor.splice(0,1);
+        obj.investor.push(data.investor);
+      }
+
+     // console.log("New Bid Auction Obj is : ",obj);
+     // var auctionarray=getauctionarray();
+     // console.log("Now the Auction array is : ",auctionarray);
+      io.to(obj.auction_id).emit("narutobidded",{data:obj});
+  
+    }
+   
+  })
+  
+
+  socket.on('nextnarutocharacter',async (data)=>
+  {
+    var obj=narutoauctionobjpresent(data.auction_id);
+    if(obj)
+    {
+      if(obj.characterindex+1<obj.charactersarray.length)
+      {
+        obj.characterindex++;
+        obj.presentcharacter=obj.charactersarray[obj.characterindex];
+        obj.investor=[];
+        obj.priceofcharacter=obj.presentcharacter.base_price - 1;
+        
+        /*var auctionarray=getauctionarray();
+        console.log("NExt array obj is :",obj);
+        console.log("after next character  the auction array is : ",auctionarray);*/
+
+
+        io.to(data.auction_id).emit('updatenarutoauctionnextcharacter',{data:obj});
+
+      }
+      else
+      {
+        var narutoauctionarray=getnarutoauctionarray();
+
+        narutoauctionarray=narutoauctionarray.filter((x)=>x.auction_id!=data.auction_id);
+
+        updatenarutoauctionarray(narutoauctionarray);
+
+       // console.log("Characters finished so now the app.js auction array is : ",auctionarray);
+       // var x=getauctionarray()
+        //console.log("Characters FInished !! so now the auction array is : ",x);
+
+        io.to(data.auction_id).emit('finishnarutoauction',{message:"Characters Finished!! Processing Tournament..."});
+      }
+    }
+
+  })
+
+
+  socket.on('increasenarutofinishcounter',(data)=>
+  {
+    var obj=narutoauctionobjpresent(data.auction_id);
+    if(obj)
+    {
+      obj.finishcounter++;
+      if(obj.finishcounter==obj.type)
+      {
+        var narutoauctionarray=getnarutoauctionarray();
+        narutoauctionarray=narutoauctionarray.filter((x)=>x.auction_id!==data.auction_id);
+        updatenarutoauctionarray(narutoauctionarray);
+        io.to(data.auction_id).emit('finishnarutoauction',{message:"Acc Bal is below $1000000!! Processing Tournament..."});
+       
+      }
+     
+      //var x=getauctionarray()
+      //console.log("Auction Array After increment is : ",x);
+    }
+  })
+
+
+  socket.on('narutovoted',(data)=>
+  {
+    var obj=narutoauctionobjpresent(data.auction_id);
+    if(obj)
+    {
+      var member=obj.members.find((x)=>x.mongoid===data.usermongoid);
+      member.votedtoendauction=true;
+
+      var counter=0;
+      for(var i=0;i<obj.members.length;i++)
+      {
+        if(obj.members[i].votedtoendauction)
+          counter++;
+      }
+
+      io.to(data.auction_id).emit("updatenarutoauctionvotes",{data:obj});
+
+      if(counter==obj.type)
+      {
+        var narutoauctionarray=getnarutoauctionarray();
+        narutoauctionarray=narutoauctionarray.filter((x)=>x.auction_id!==data.auction_id);
+        updatenarutoauctionarray(narutoauctionarray);
+        io.to(data.auction_id).emit('finishnarutoauction',{message:"All Members Voted To End Auction!"});
+       
+      }
+
+     // console.log("Now the auction array is : ",getauctionarray());
+    }
+  })
+
+
+
+
+    //=================naruto duel===============================
+    socket.on('joinnarutoduel',(data)=>
+    {
+        var obj=narutoduelobjpresent(data.duel_id);
+        if(obj)
+        {
+          if(data.isPlayerone)
+          {
+            obj.player1=data.playerobj;
+          }
+          else 
+          {
+            obj.player2=data.playerobj;
+          }
+          socket.join(data.duel_id);
+          io.to(data.duel_id).emit("narutostartmatch",{data:obj});
+
+        //  console.log("The duel array is : ",getdragonballduelarray());
+        }
+        else 
+        {
+          var duelarray=getnarutoduelarray();
+          if(data.isPlayerone)
+          { 
+            var duelobj=
+            {
+              duel_id:data.duel_id,
+              tournament_id:data.tournament_id,
+              player1:data.playerobj,
+              player2:null,
+              defend:'player2',
+              attacker:[],
+              defender:[],
+              final_match:data.final_match
+            
+              
+            }
+          }
+          else 
+          {
+            var duelobj=
+            {
+              duel_id:data.duel_id,
+              tournament_id:data.tournament_id,
+              player1:null,
+              player2:data.playerobj,
+              defend:'player2',
+              attacker:[],
+              defender:[],
+              final_match:data.final_match         
+              
+            }
+          }
+          duelarray.push(duelobj);
+          updatenarutoduelarray(duelarray);
+        socket.join(data.duel_id);
+        }
+    })
+
+
+    socket.on('narutoattack',(data)=>
+    {
+      var obj=narutoduelobjpresent(data.duel_id);
+      if(obj)
+      {
+          obj.attacker=[];
+          obj.attacker.push(data.playerobj);
+          io.to(data.duel_id).emit('narutoattacked',{data:obj});
+
+          //Check trigger fight state
+            if(obj.defender.length!==0 && obj.attacker.length!==0)
+            {
+              io.to(data.duel_id).emit('narutofight');
+            }
+          //=========================
+      }
+    })
+
+  socket.on('narutodefend',(data)=>
+  {
+    var obj=narutoduelobjpresent(data.duel_id);
+    if(obj)
+    {
+      obj.defender=[];
+      obj.defender.push(data.playerobj);
+      io.to(data.duel_id).emit('narutodefended',{data:obj});
+
+        //Check trigger fight state
+        if(obj.defender.length!==0 && obj.attacker.length!==0)
+          {
+            io.to(data.duel_id).emit('narutofight');
+          }
+        //=========================
+    }
+  })
+
+  socket.on('narutoreset',(data)=>
+  {
+    var obj=narutoduelobjpresent(data.duel_id);
+    if(obj)
+    {
+      obj.player1=data.player1;
+      obj.player2=data.player2;
+      if(obj.defend=='player2')
+        obj.defend='player1'
+      else 
+        obj.defend='player2';
+      obj.attacker=[];
+      obj.defender=[];
+
+      //console.log("reset data is : ",obj);
+      io.to(data.duel_id).emit('narutoresetted',{data:obj});
+    }
+  })
+
+
+
+  socket.on('lostnarutoduel',async(data)=>
+  {
+    socket.broadcast.to(data.duel_id).emit('narutoiwon');//This signifies opponennt won
+    var mongoid=socket.handshake.query['foo'];
+    await User.findByIdAndUpdate(ObjectId(mongoid),{
+      Ongoing_DragonBall_Deck:[],
+      Ongoing_Naruto_Deck:[],
+      OngoingTournament:false,
+      Ongoing_Tournament_id:"",
+      Account_Balance:0,
+      Ongoing_Duel_id:""
+    })
+
+   
+    var duelarray=getnarutoduelarray();
+    duelarray=duelarray.filter((duelobj)=>duelobj.duel_id!==data.duel_id);
+    updatenarutoduelarray(duelarray);
+
+    console.log("Now the duel array is after duel completion : ",getnarutoduelarray());
+
+    
+  })
+    //==================naruto duel ===============================
+
+  //====================================================Naruto=======================================================================
 
   socket.on("disconnect",()=>
   {
@@ -488,6 +857,10 @@ io.on("connection",async (socket)=>
   })*/
 
 })
+
+
+
+
 
 
 if(process.env.NODE_ENV==="production")

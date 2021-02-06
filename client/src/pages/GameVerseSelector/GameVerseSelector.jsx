@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useContext} from "react";
-
+import {clone} from "ramda";
 import axios from "axios";
 import backendurl from "../../backend_url";
 
@@ -32,6 +32,19 @@ const GameVerseSelector = (props)=>
         shown:false,
         type:''
     })
+
+    const [narutoplaylist,setnarutoplaylist]=useState({
+        array:['Silhouette','closer','naruto_op_7','shalala','hero','strong_and_strike','bluebird',],
+        playingnow:-1
+    })
+
+    const [dragonballplaylist,setdragonplaylist]=useState({
+        array:['dbs_op_1','dbs_op_2','kachidaze'],
+        playingnow:-1
+    });
+
+    var clonednarutoplaylist;
+    var cloneddragonballplaylist;
     //================
 
     useEffect(()=>
@@ -54,7 +67,7 @@ const GameVerseSelector = (props)=>
 
     const handlecreategame=()=>
     {
-        if(gameverse && gameverse!=="naruto")
+        if(gameverse)
         {
             const newtournamentobj={
                 creator_mongoid:User._id,
@@ -97,7 +110,7 @@ const GameVerseSelector = (props)=>
                 }
                 setalertdata(alert);
             }
-            else{
+            /*else{
                 //alert("naruto is still in development");
                 var alert={
                     message:'Naruto is stll in Development!',
@@ -105,7 +118,7 @@ const GameVerseSelector = (props)=>
                     type:'red'
                 }
                 setalertdata(alert);
-            }
+            }*/
         }
 
     }
@@ -149,6 +162,8 @@ const GameVerseSelector = (props)=>
                 numberofplayers:numberofplayers
             }
             setisLoading(true);
+
+          
             axios({
                 method:"POST",
                 data:obj,
@@ -193,32 +208,74 @@ const GameVerseSelector = (props)=>
 
     useEffect(()=>
     {
+        cloneddragonballplaylist=clone(dragonballplaylist);
+        clonednarutoplaylist=clone(narutoplaylist);
+
         if(gameverse=='dragonball')
         {
-            var bluebird=document.getElementById('bluebird');
-            if(bluebird)
+            if(clonednarutoplaylist.playingnow!=-1)
             {
-                bluebird.pause();
-                bluebird.currentTime=0;
+                var narutosong=document.getElementById(clonednarutoplaylist.array[clonednarutoplaylist.playingnow]);
+                console.log(narutosong);
+                if(narutosong)
+                {
+                    narutosong.pause();
+                    narutosong.currentTime=0;
+                }
+               
             }
 
-            var kachidaze=document.getElementById('kachidaze');
-            if(kachidaze)
-                kachidaze.play();
+            if(cloneddragonballplaylist.playingnow+1<cloneddragonballplaylist.array.length)
+            {
+                cloneddragonballplaylist.playingnow+=1;
+                var dragonballsong=document.getElementById(cloneddragonballplaylist.array[cloneddragonballplaylist.playingnow]);
+                if(dragonballsong)
+                {
+                    dragonballsong.play();
+                    dragonballsong.volume="0.4";
+                }
+            }
+            else
+            {
+                cloneddragonballplaylist.playingnow=0;
+                var dragonballsong=document.getElementById(cloneddragonballplaylist.array[cloneddragonballplaylist.playingnow]);
+                if(dragonballsong)
+                {
+                    dragonballsong.play();
+                }
+            }
+
+            setdragonplaylist(cloneddragonballplaylist);
+           
         }
         if(gameverse=='naruto')
         {
-            var kachidaze=document.getElementById('kachidaze');
-            if(kachidaze)
+            if(cloneddragonballplaylist.playingnow!=-1)
             {
-                kachidaze.pause();
-                kachidaze.currentTime=0;
+                var dragonballsong=document.getElementById(cloneddragonballplaylist.array[cloneddragonballplaylist.playingnow]);
+                if(dragonballsong)
+                {
+                    dragonballsong.pause();
+                    dragonballsong.currentTime=0;
+                }
+               
             }
-            var bluebird=document.getElementById('bluebird');
-            if(bluebird)
-            {
-                bluebird.play();
-            }
+
+            if(clonednarutoplaylist.playingnow+1<clonednarutoplaylist.array.length)
+                clonednarutoplaylist.playingnow+=1;
+            
+            else            
+                clonednarutoplaylist.playingnow=0;
+
+             var narutosong=document.getElementById(clonednarutoplaylist.array[clonednarutoplaylist.playingnow]);
+             if(narutosong)
+             {
+               narutosong.play();
+               narutosong.volume='0.4';
+             }
+
+             setnarutoplaylist(clonednarutoplaylist);
+            
         
         }
     },[gameverse])
@@ -228,8 +285,16 @@ const GameVerseSelector = (props)=>
             {alertdata.shown && <div className="GameVerse_Alert"><Alert alertdata={alertdata} resetalert={resetalert}/></div>}
            
             {/*Audio*/}
+            <audio src="https://res.cloudinary.com/drolmjcot/video/upload/v1612544441/audio/Dragon_Ball_Super_Opening_1_-_Chouzetsu_Dynamic_y9aqku.mp3" id="dbs_op_1" preload="metadata" type="audio/mpeg" loop></audio>
+            <audio src="https://res.cloudinary.com/drolmjcot/video/upload/v1612544587/audio/Dragon_Ball_Super_Opening_2_-_Limit-Break_x_Survivor_bmovws.mp3" id="dbs_op_2" preload="metadata" type="audio/mpeg" loop></audio>
             <audio src="https://res.cloudinary.com/drolmjcot/video/upload/v1611757758/audio/Ka_Ka_Kachi_Daze_Full_320_kbps_m1hwns.mp3" id="kachidaze" preload="metadata" type="audio/mpeg" loop></audio>
             <audio src="https://res.cloudinary.com/drolmjcot/video/upload/v1610367006/audio/bluebird_juhczs.mp3" id="bluebird" preload="metadata" type="audio/mpeg" loop></audio>
+            <audio src="https://res.cloudinary.com/drolmjcot/video/upload/v1612540613/audio/anime-ost_naruto-shippuden-opening-04-closer-by-inoue-joe_skampp.mp3" id="closer" preload="metadata" type="audio/mpeg" loop></audio>
+            <audio src="https://res.cloudinary.com/drolmjcot/video/upload/v1612543048/audio/Naruto_Shippuden_-_Opening_7_-_Full_r5oypz.mp3" id="naruto_op_7" preload="metadata" type="audio/mpeg" loop></audio>
+            <audio src="https://res.cloudinary.com/drolmjcot/video/upload/v1612543257/audio/naruto-shippuden-en-espanol_naruto-shippuden-opening-5-sha-la-la_rrkt51.mp3" id="shalala" preload="metadata" type="audio/mpeg" loop></audio>
+            <audio src="https://res.cloudinary.com/drolmjcot/video/upload/v1612543425/audio/naruto-shippuden-en-espanol_naruto-shippuuden-opening-1-hero-s-come-back_wphbn3.mp3" id="hero" preload="metadata" type="audio/mpeg" loop></audio>
+            <audio src="https://res.cloudinary.com/drolmjcot/video/upload/v1612543777/audio/anime-ost_naruto-shippuden-opening-16-silhouette-by-kana-boon_jer9wv.mp3" id="Silhouette" preload="metadata" type="audio/mpeg" loop></audio>
+            <audio src="https://res.cloudinary.com/drolmjcot/video/upload/v1612550706/audio/Naruto_-_Strong_and_Strike_rj4o78.mp3" id="strong_and_strike" preload="metadata" type="audio/mpeg" loop></audio>
 
             {/*.....*/}
           {User && 

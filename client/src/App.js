@@ -11,6 +11,11 @@ import DragonBallAuction from "./DragonBall/Auction/DragonBallAuction";
 import DragonBallDuel from "./DragonBall/Duel/Duel";
 //===================
 
+//Naruto=======
+import NarutoAuction from "./Naruto/Auction/NarutoAuction";
+import NarutoDuel from "./Naruto/Duel/Duel";
+//================
+
 import {GlobalProvider} from "./Contexts/GlobalContext/GlobalContext";
 const App=()=> 
 {
@@ -29,6 +34,11 @@ const App=()=>
               <Route exact path="/dragonball/auction" render={(routeProps)=><DragonBallAuction {...routeProps}/>}/>
               <Route exact path ="/dragonball/duel" render={(routeProps)=><DragonBallDuel {...routeProps}/>}/>
              {/*------------------*/}
+
+             {/*Naruto Routes*/}
+              <Route exact path="/naruto/auction" render={(routeProps)=><NarutoAuction {...routeProps}/>}/>
+              <Route exact path ="/naruto/duel" render={(routeProps)=><NarutoDuel {...routeProps}/>}/>
+             {/*----------------*/}
           </GlobalProvider>
           
       </Switch>

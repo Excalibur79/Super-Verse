@@ -1,6 +1,6 @@
 import React,{useState,useEffect,useContext} from "react";
 import {GlobalContext} from "../../Contexts/GlobalContext/GlobalContext";
-import "./DragonBallAuction.scss";
+import "./NarutoAuction.scss";
 import dollar from "../../assets/icons/dollar.png";
 import Card from "../Card/Card";
 import Alert from "../../Components/Alert/Alert";
@@ -13,7 +13,7 @@ const ENDPOINT="https://excalibur-superverse.herokuapp.com/";
 
 
 
-const DragonBallAuction =(props)=>
+const NarutoAuction =(props)=>
 {
     const {User,ChangeUser,Tournament,ChangeTournament,ChangeMySocket}=useContext(GlobalContext);
     const [Socket,setsocket]=useState(null)
@@ -84,7 +84,7 @@ const DragonBallAuction =(props)=>
             if(AuctionObj.investor.length==0)
             {
                 setvoted(true);
-                Socket.emit('voted',{
+                Socket.emit('narutovoted',{
                     auction_id:AuctionObj.auction_id,
                     usermongoid:User._id.toString()
                 })
@@ -147,7 +147,7 @@ const DragonBallAuction =(props)=>
             if(AuctionObj.investor.length==0)
             {
                 var data={auction_id:AuctionObj.auction_id};
-                Socket.emit('nextcharacter',data);
+                Socket.emit('nextnarutocharacter',data);
             }
             else 
             {
@@ -183,7 +183,7 @@ const DragonBallAuction =(props)=>
                         investor:investor,bidprice:bidvalue,auction_id:AuctionObj.auction_id
                     }
                    // console.log("Lets bid",data);
-                    Socket.emit("bid",data);
+                    Socket.emit("narutobid",data);
                 }
                 else 
                 {
@@ -255,7 +255,7 @@ const DragonBallAuction =(props)=>
                 axios({
                     method:"POST",
                     data:data,
-                    url:`${backendurl}/superverse/dragonball/updateuser/auctiondata`
+                    url:`${backendurl}/superverse/naruto/updateuser/auctiondata`
                 }).then((data)=>
                 {
                    // console.log("updateduser is : ",data);
@@ -272,10 +272,10 @@ const DragonBallAuction =(props)=>
                 avatar:User.avatar,
                 uid:User.uid,
                 mongoid:User._id,
-                gameverse:"dragonball",
+                gameverse:"naruto",
                 type:Tournament.type
             }
-            Socket.emit("joinauction",data,(returneddata)=>
+            Socket.emit("joinnarutoauction",data,(returneddata)=>
             {
                // console.log("returned data ",returneddata);
 
@@ -288,7 +288,7 @@ const DragonBallAuction =(props)=>
         if(Socket!==null)
         {
 
-            Socket.on("updateauction",(data)=>
+            Socket.on("updatenarutoauction",(data)=>
             {
                // console.log("UpdateAuction of user : ",data);
                 
@@ -303,7 +303,7 @@ const DragonBallAuction =(props)=>
                     axios({
                         method:"POST",                   
                         data:x,
-                        url:`${backendurl}/superverse/dragonball/gettournamentinfo`
+                        url:`${backendurl}/superverse/naruto/gettournamentinfo`
                     }).then((res)=>
                     {
                         //console.log("UPdaaateedd@@@");
@@ -314,7 +314,7 @@ const DragonBallAuction =(props)=>
                 //======================================================
             })
 
-            Socket.on("triggerauction",(data)=>
+            Socket.on("triggernarutoauction",(data)=>
             {
                 //alert("Lets Start The Auction!");
                // console.log("trigger auction",data);
@@ -323,7 +323,7 @@ const DragonBallAuction =(props)=>
                
             })
 
-            Socket.on("bidded",(data)=>
+            Socket.on("narutobidded",(data)=>
             {
                // console.log("Lets Timer with this : ",data.data);
                 setAuctionObj(data.data);
@@ -334,18 +334,18 @@ const DragonBallAuction =(props)=>
 
             })
 
-            Socket.on("updateauctionvotes",(data)=>
+            Socket.on("updatenarutoauctionvotes",(data)=>
             {
                 setAuctionObj(data.data);
                
             })
-            Socket.on("updateauctionnextcharacter",(data)=>
+            Socket.on("updatenarutoauctionnextcharacter",(data)=>
             {
                 setAuctionObj(data.data);
                 setbidvalue(data.data.presentcharacter.base_price);
                 resettimer();
             })
-            Socket.on('finishauction',(data)=>
+            Socket.on('finishnarutoauction',(data)=>
             {
                // console.log("Auction has Finsihed Because all of you spent your money");
                setLoading({
@@ -358,7 +358,7 @@ const DragonBallAuction =(props)=>
                         data:'',
                         loading:false
                     })
-                    props.history.push("/dragonball/duel");
+                    props.history.push("/naruto/duel");
 
                },7000)
                 setEndAuction(true);
@@ -412,8 +412,8 @@ const DragonBallAuction =(props)=>
                         usermongoid:User._id.toString(),
                         auction_id:AuctionObj.auction_id,
                         characterid:AuctionObj.presentcharacter._id.toString(),
-                        type:2,
-                        gameverse:'dragonball',
+                        type:Tournament.type,
+                        gameverse:'naruto',
                         newaccountbalance:User.Account_Balance - AuctionObj.priceofcharacter
                     }
 
@@ -421,7 +421,7 @@ const DragonBallAuction =(props)=>
                     axios({
                         method:"POST",
                         data:data,
-                        url:`${backendurl}/superverse/dragonball/auction/buycharacter`
+                        url:`${backendurl}/superverse/naruto/auction/buycharacter`
                     }).then((data)=>
                     {   
                         console.log("You Bought : ",data);
@@ -438,7 +438,7 @@ const DragonBallAuction =(props)=>
 
                         //Next Character
                         var data={auction_id:AuctionObj.auction_id};
-                        Socket.emit('nextcharacter',data);
+                        Socket.emit('nextnarutocharacter',data);
 
                         //=============
 
@@ -456,7 +456,7 @@ const DragonBallAuction =(props)=>
         if(User && User.Account_Balance<1000000 && Socket)
         {
             var data={auction_id:AuctionObj.auction_id};
-            Socket.emit("increasefinishcounter",data);
+            Socket.emit("increasenarutofinishcounter",data);
         }
     },[User])
 
@@ -509,7 +509,7 @@ const DragonBallAuction =(props)=>
                              </div>
                            
                             <div className="My_Deck">
-                                {User.Ongoing_DragonBall_Deck.map((character)=><img src={character.dp}/>)}
+                                {User.Ongoing_Naruto_Deck.map((character)=><img src={character.dp}/>)}
                             </div>
                            
                            <div className="ProgressBar">
@@ -537,7 +537,7 @@ const DragonBallAuction =(props)=>
                                     <div className="Skip" onClick={nextcharacter}>Skip</div>
                                     <div onClick={handletriggerbuy}><img src={dollar}/></div>
                                 </div>
-                                {!voted && User.Ongoing_DragonBall_Deck.length>0 &&
+                                {!voted && User.Ongoing_Naruto_Deck.length>0 &&
                                 <div className="Vote">
                                     <div onClick={handleVote}>Vote To End Auction</div>
                                 </div>}
@@ -566,4 +566,4 @@ const DragonBallAuction =(props)=>
         </div>
     )
 }
-export default DragonBallAuction;
+export default NarutoAuction;
