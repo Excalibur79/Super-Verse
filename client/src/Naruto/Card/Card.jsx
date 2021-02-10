@@ -1,8 +1,32 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import "./Card.scss";
+import transformationarray from "../transformations";
+import {clone} from 'ramda';
 
-const Card=({name,health,attack,defence,baseprice,url,theme,transformable})=>
+const Card=({name,health,attack,defence,baseprice,url,theme,transformable,next_character,type})=>
 {
+    const [nextform,setnextform]=useState(null);
+    useEffect(()=>
+    {
+       // console.log(name +`${transformable?"transformable":"nope"}`);
+        if(transformable)
+        {
+            var obj = transformationarray.find((x)=>next_character===x.name);
+            if(obj)
+            {
+                var clonedobj=clone(obj);
+                if(health+25>=clonedobj.total_health)
+                    clonedobj.health=clonedobj.total_health;
+                else 
+                    clonedobj.health=health+25;
+                
+                setnextform(clonedobj);
+            }
+        }
+        else 
+            setnextform(null);
+    },[name,health])
+
     return(
         <div className="Character">
             <div className="Top-Section" style={{"backgroundColor":`${theme}`}}>
@@ -17,7 +41,7 @@ const Card=({name,health,attack,defence,baseprice,url,theme,transformable})=>
                     <div className="About" style={{color:`${theme}`}}>Defence</div>
                  </div>
                  <div className="Flex">
-                     <div className="My_Circle">
+                     <div className="My_Circle card_health">
                          <div>{health}</div>
                         <svg>
                             <circle class="bg" cx="40" cy="40" r="35" />
@@ -25,7 +49,18 @@ const Card=({name,health,attack,defence,baseprice,url,theme,transformable})=>
                         </svg>
                      </div>
 
-                   <div className="My_Circle">
+                    {nextform && <div  className="next_form_health">
+                        <div className="My_Circle">
+                            <div style={{color:"gold"}}>{nextform.health}</div>
+                            <svg>
+                                <circle class="bg" cx="40" cy="40" r="35" />
+                                <circle class="meter-1" cx="40" cy="40" r="35" strokeDasharray="219.9" strokeDashoffset={`${219.9 * (1 - (nextform.health/100))}`}/>
+                            </svg>
+                        </div>
+                    </div>}
+                    
+
+                   <div className="My_Circle card_attack">
                         <div>{attack}</div>
                         <svg>
                             <circle class="bg" cx="40" cy="40" r="35" />
@@ -33,7 +68,18 @@ const Card=({name,health,attack,defence,baseprice,url,theme,transformable})=>
                         </svg>
                    </div>
 
-                   <div className="My_Circle">
+
+                   {nextform && <div  className="next_form_attack">
+                        <div className="My_Circle">
+                            <div style={{color:"gold"}}>{nextform.attack}</div>
+                            <svg>
+                                <circle class="bg" cx="40" cy="40" r="35" />
+                                <circle class="meter-2" cx="40" cy="40" r="35" strokeDasharray="219.9" strokeDashoffset={`${219.9 * (1 - (nextform.attack/100))}`}/>
+                            </svg>
+                        </div>
+                    </div>}
+
+                   <div className="My_Circle card_defence">
                      <div>{defence}</div>
                         <svg>
                             <circle class="bg" cx="40" cy="40" r="35" />
@@ -41,6 +87,15 @@ const Card=({name,health,attack,defence,baseprice,url,theme,transformable})=>
                         </svg>
                    </div>
                    
+                   {nextform && <div  className="next_form_defence">
+                        <div className="My_Circle">
+                            <div style={{color:"gold"}}>{nextform.defence}</div>
+                            <svg>
+                                <circle class="bg" cx="40" cy="40" r="35" />
+                                <circle class="meter-3" cx="40" cy="40" r="35" strokeDasharray="219.9" strokeDashoffset={`${219.9 * (1 - (nextform.defence/100))}`}/>
+                            </svg>
+                        </div>
+                    </div>}
                     
                  </div>
                 

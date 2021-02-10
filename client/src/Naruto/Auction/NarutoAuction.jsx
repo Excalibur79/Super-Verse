@@ -555,6 +555,7 @@ const NarutoAuction =(props)=>
                                     theme={AuctionObj.presentcharacter.theme}
                                     transformable={AuctionObj.presentcharacter.transformable}
                                     next_character={AuctionObj.presentcharacter.next_character}
+                                    type='Auction'
                                 />
                            </div>
                           

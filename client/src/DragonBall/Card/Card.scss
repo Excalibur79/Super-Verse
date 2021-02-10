@@ -64,6 +64,7 @@
             display:flex;
             justify-content: space-around;
             margin:.5rem;
+            position:relative;
             .About
             {
                
@@ -91,6 +92,8 @@
                 color:black;
                 font-family: 'Lato', sans-serif;
               }
+
+             
             }
         }
         .Base_Price
@@ -146,4 +149,127 @@ svg {
     
     stroke: #63C8F2;
     animation: progress-1 1s ease-out;
+  }
+
+
+  .next_form_health
+  {
+    position:absolute;
+    top:-9%;
+    left:-28%;
+    border-radius:20px;
+    background-color:#464948 ;
+    font-family: 'Poppins', sans-serif;
+    font-size:2rem;
+    color:#BBC6C1 ;
+    padding:.5rem;
+    padding-left:.9rem;
+   opacity: 0;
+   visibility: hidden;
+  }
+
+ 
+  
+  .next_form_attack
+  {
+    position:absolute;
+    top:100%;
+    left:35%;
+    border-radius:20px;
+    background-color:#464948 ;
+    font-family: 'Poppins', sans-serif;
+    font-size:2rem;
+    color:#BBC6C1 ;
+    padding:.5rem;
+    padding-left:.9rem;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .next_form_defence
+  {
+    position:absolute;
+    
+    top:-9%;
+    left:100%;
+    border-radius:20px;
+    background-color:#464948 ;
+    font-family: 'Poppins', sans-serif;
+    font-size:2rem;
+    color:#BBC6C1 ;
+    padding:.5rem;
+    padding-left:.9rem;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .card_health 
+  {
+    &:hover + .next_form_health 
+    {
+      animation-name:fade-in-right;
+      animation-duration:.5s;
+      animation-fill-mode: forwards;
+    }
+  }
+  .card_attack 
+  {
+    &:hover + .next_form_attack 
+    {
+      animation-name:fade-in-top;
+      animation-duration:.5s;
+      animation-fill-mode: forwards;
+    }
+  }
+  .card_defence 
+  {
+    &:hover + .next_form_defence
+    {
+      animation-name:fade-in-left;
+      animation-duration:.5s;
+      animation-fill-mode: forwards;
+    }
+  }
+  
+
+  @keyframes fade-in-right 
+  {
+    0%{
+      visibility: visible;
+      opacity:0;
+      transform: translateX(15%);
+    }
+    100%{
+      visibility: visible;
+      opacity:1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fade-in-top 
+  {
+    0%{
+      visibility: visible;
+      opacity:0;
+      transform: translateY(-15%);
+    }
+    100%{
+      visibility: visible;
+      opacity:1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in-left
+  {
+    0%{
+      visibility: visible;
+      opacity:0;
+      transform: translateX(-15%);
+    }
+    100%{
+      visibility: visible;
+      opacity:1;
+      transform: translateX(0);
+    }
   }

@@ -1263,7 +1263,7 @@ const Duel=(props)=>
                                     theme={opponentobj.chosencharacter.theme}
                                     transformable={opponentobj.chosencharacter.transformable}
                                     next_character={opponentobj.chosencharacter.next_character}
-                                
+                                    type='Duel'
                                 /></div>}
 
                             </div> 
@@ -1290,7 +1290,7 @@ const Duel=(props)=>
                                     theme={myobj.chosencharacter.theme}
                                     transformable={myobj.chosencharacter.transformable}
                                     next_character={myobj.chosencharacter.next_character}
-
+                                    type='Duel'
                                 />
                             </div>
 

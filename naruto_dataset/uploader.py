@@ -5,7 +5,7 @@ dataarray=[]
 df=pandas.read_csv("dataset.csv",encoding='ANSI')
 
 def upload():
-    url="http://localhost:5000/superverse/naruto/createcharacters"   
+    url="https://excalibur-superverse.herokuapp.com/superverse/naruto/createcharacters"   
     data=(dataarray)
     #print(data)
     x=requests.post(url,json=data)
