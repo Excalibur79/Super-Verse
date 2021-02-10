@@ -546,6 +546,20 @@ var transformationarray=[
         next_character: "",
     },
     {
+        name: "Jiren Final F",
+        url: "https://res.cloudinary.com/drolmjcot/image/upload/q_auto:eco/v1612967868/jiren_full_power_2_fcpdks.png",
+        theme: "rgba(214,214,214,1)",
+        attack:97,
+        defence:97,
+        health:95,
+        total_health:95,
+        base_price:5000000,
+        dp:"https://res.cloudinary.com/dvs0u47yi/image/upload/v1611585598/Dps/jiren_mx45sy.png",
+        transformable: false,
+        next_character: "",
+    },
+
+    {
         name: "Kale SSJ1",
         url: "https://res.cloudinary.com/dvs0u47yi/image/upload/v1611751065/Optimized%20images/Transformations/KaleSSJ1_t2keja.png",
         theme: "rgba(223,250,156,1)",
