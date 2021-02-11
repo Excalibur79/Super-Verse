@@ -15,6 +15,71 @@
         border-radius:10px 10px 0 0;
         filter:brightness(1.07);
         position:relative;
+
+        .Stamina 
+        {
+          position:absolute;
+          top:1rem;
+          left:4%;
+          cursor:pointer;
+          &:hover + div 
+          {
+            animation-name:fade-in-right;
+            animation-duration:.5s;
+            animation-fill-mode: forwards;
+          }
+          .Stamina_bar 
+          {
+            height:23rem;
+            width:1.3rem;
+            border:1px solid #909497;
+           
+            position:relative;
+            border-radius:10px;
+            background-color:white;
+            position:relative;
+            display:flex;
+            flex-direction:column;
+            justify-content: flex-start;
+            .Threshold 
+            {
+             // border:2px solid black;
+              background-color:black;
+              position:absolute;
+              padding:2px;
+              width:100%;
+              z-index:9;
+             
+            }
+            .Stamina_progress 
+            { position:absolute;
+              top:-100%;
+              width:100%;
+              background:linear-gradient(to bottom,#f46b45,#eea849);              //border:1px solid green;
+              border-radius:10px;
+            }
+          }
+        }
+        .stamina_hover_result 
+        {
+          position:absolute;
+          top:10%;
+          left:-15%;
+          border-radius:20px;
+          background-color:#464948 ;
+          font-family: 'Poppins', sans-serif;
+          font-size:2rem;
+          color:#BBC6C1 ;
+          padding:.5rem;
+          width:5rem;
+          height:5rem;
+          text-align:center;
+          padding-top:.7rem;
+          opacity: 0;
+          visibility: hidden;
+
+        }
+
         .gold_circle 
         {
           width:2.5rem;

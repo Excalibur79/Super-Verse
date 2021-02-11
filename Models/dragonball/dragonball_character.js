@@ -10,6 +10,8 @@ var DragonBall_CharacterSchema=new mongoose.Schema(
         defence:Number,
         health:Number,
         total_health:Number,
+        stamina:Number,
+        stamina_threshold:Number,
         base_price:Number,
         transformable:Boolean,
         next_character:String

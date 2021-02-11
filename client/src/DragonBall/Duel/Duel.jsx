@@ -63,6 +63,8 @@ const Duel=(props)=>
     const [transforming,settransforming]=useState(false);
     var xx='';
     var arr1=[];var arr2=[];
+    var x;
+    var y;
 
 
 
@@ -453,9 +455,19 @@ const Duel=(props)=>
             if(mymove=='defend')
             {
                 var y=clone(myobj);
-                setTimeout(()=>
+               
+
+                setTimeout(async ()=>
                 {
                     var damage=Math.floor((opponentobj.chosencharacter.attack/y.chosencharacter.defence)*20);
+
+                    if(y.chosencharacter.stamina<y.chosencharacter.stamina_threshold)
+                    {
+                        var extradamage=Math.floor(((y.chosencharacter.stamina_threshold - y.chosencharacter.stamina)/10)*damage);
+                        damage=damage + extradamage;
+                    }
+
+
                     if(y.chosencharacter.health<damage)
                     {
                         damage=y.chosencharacter.health;
@@ -491,6 +503,27 @@ const Duel=(props)=>
 
 
                     setmyobj(y);
+
+                     x=clone(opponentobj);
+                    for(var i=0;i<x.deck.length;i++)
+                    {
+                       
+                        if(i==x.chosencharacterindex)
+                        {
+                            if(x.deck[i].stamina-1>=0)
+                                x.deck[i].stamina-=1;
+                        }
+                        else 
+                        {
+                            if(x.deck[i].stamina+1<=10)
+                                x.deck[i].stamina++;
+                        }
+                    }
+                    x.chosencharacter=x.deck[x.chosencharacterindex];
+                    console.log("Opponent has attacked and his data should be : ",x);
+                    setopponentobj(x);
+
+
                 },1000);
 
 
@@ -529,14 +562,14 @@ const Duel=(props)=>
                         {
                            var data={
                                 player1:y,
-                                player2:opponentobj,
+                                player2:x,
                                 duel_id:DuelObj.duel_id
                             }
                         }
                         else 
                         {
                            var data={
-                                player1:opponentobj,
+                                player1:x,
                                 player2:y,
                                 duel_id:DuelObj.duel_id
                             }
@@ -553,9 +586,19 @@ const Duel=(props)=>
             else //I am attacker (spectator)
             {
                 var y=clone(opponentobj);
-                setTimeout(()=>
+
+               
+
+                setTimeout(async ()=>
                 {
                     var damage=Math.floor((myobj.chosencharacter.attack/y.chosencharacter.defence)*20);
+
+                    if(y.chosencharacter.stamina<y.chosencharacter.stamina_threshold)
+                    {
+                        var extradamage=Math.floor(((y.chosencharacter.stamina_threshold - y.chosencharacter.stamina)/10)*damage);
+                        damage=damage + extradamage;
+                    }
+
                     if(y.chosencharacter.health<damage)
                     {
                         damage=y.chosencharacter.health;
@@ -574,6 +617,31 @@ const Duel=(props)=>
                         shown:true,
                         type:'green'
                     })
+
+
+                    //Stamina algo
+                   /* var copiedmyobj=clone(myobj);
+                    for(var i=0;i<copiedmyobj.deck.length;i++)
+                    {
+                        
+                        if(i===myobj.chosencharacterindex)
+                        {
+                            if(copiedmyobj.deck[i].stamina-1>=0)
+                                copiedmyobj.deck[i].stamina-=1;
+                        }
+                        else 
+                        {
+                            if(copiedmyobj.deck[i].stamina+1<=10)
+                              copiedmyobj.deck[i].stamina+=1;
+                        }
+                    }
+                    copiedmyobj.chosencharacter=copiedmyobj.deck[copiedmyobj.chosencharacterindex];
+                    console.log("Attack stamina result : ",copiedmyobj);
+                    console.log("My Original Obj is : ",myobj);
+                    //setmyobj(copiedmyobj);*/
+                   
+                    //============
+
                 },1000);
             }
            
@@ -643,6 +711,60 @@ const Duel=(props)=>
       
 
     },[myobj,opponentobj])
+
+
+    //Stamina System my move config===============
+    useEffect(()=>
+    {
+        if(mymove=='attack')
+        {
+           
+            var counter=0;
+            for(var i = 0;i<myobj.deck.length;i++)
+            {
+                if(myobj.deck[i].stamina<myobj.deck[i].stamina_threshold || myobj.deck[i].health==0)
+                {
+                    counter++;
+                }
+            }
+            if(counter==myobj.deck.length)
+            {
+                setTimeout(()=>
+                {
+                    setalertdata({
+                        message:"All Characters Out of Stamina!!",
+                        shown:true,
+                        type:'red'
+                    })
+                },1000)
+
+                setTimeout(()=>
+                {
+                    MySocket.emit('lostduel',{duel_id:DuelObj.duel_id});
+                    var resultdata={
+                        message1:'YOU LOST!',
+                        message2:'You lost the Tournament!',
+                        message3:'Redirecting...',
+                        shown:true
+                    } 
+                    setresult(resultdata);
+
+                    setTimeout(()=>
+                    {
+                        props.history.push('/');
+                    },9000);
+                },2000)
+                //You Lose!!
+               
+            }
+           
+        }
+    },[mymove])
+
+    //=======================================
+
+
+
     //Functions ================
 
     const resetalert=()=>
@@ -666,41 +788,54 @@ const Duel=(props)=>
         {
             if(myobj.chosencharacter.health!==0)
             {
-                setmycharacterplaced(true);
-                var player=
+                if((mymove=='attack' && myobj.chosencharacter.stamina>=myobj.chosencharacter.stamina_threshold) || mymove=='defend')
                 {
-                    name:User.Name,
-                    avatar:User.avatar,
-                    uid:User.uid,
-                    mongoid:User._id,
-                    deck:myobj.deck,
-                    chosencharacter:myobj.chosencharacter,
-                    chosencharacterindex:myobj.chosencharacterindex,
-                    focuspoints:myobj.focuspoints,
-                    totalhealth:myobj.totalhealth,
-                    playerhealth:myobj.playerhealth
+                    setmycharacterplaced(true);
+                    var player=
+                    {
+                        name:User.Name,
+                        avatar:User.avatar,
+                        uid:User.uid,
+                        mongoid:User._id,
+                        deck:myobj.deck,
+                        chosencharacter:myobj.chosencharacter,
+                        chosencharacterindex:myobj.chosencharacterindex,
+                        focuspoints:myobj.focuspoints,
+                        totalhealth:myobj.totalhealth,
+                        playerhealth:myobj.playerhealth
+                    }
+                    var data=
+                    {
+                            usermongoid:User._id.toString(),
+                            duel_id:DuelObj.duel_id,
+                            isPlayerone:isplayer1(DuelObj.player1.mongoid),
+                            playerobj:player
+                        
+                    }
+    
+                   // console.log("placing move",data);
+    
+                    if(mymove=='attack')
+                    {
+                      //  console.log('attacking now ',data);
+                            MySocket.emit('attack',data);
+                    }
+                    else if(mymove=='defend')
+                    {
+                       // console.log('defending now : ',data);
+                        MySocket.emit('defend',data);
+                    }
                 }
-                var data=
+                else 
                 {
-                        usermongoid:User._id.toString(),
-                        duel_id:DuelObj.duel_id,
-                        isPlayerone:isplayer1(DuelObj.player1.mongoid),
-                        playerobj:player
-                    
+                    setalertdata({
+                        message:"Stamina Low!",
+                        shown:true,
+                        type:'red'
+                    })
                 }
-
-               // console.log("placing move",data);
-
-                if(mymove=='attack')
-                {
-                  //  console.log('attacking now ',data);
-                        MySocket.emit('attack',data);
-                }
-                else if(mymove=='defend')
-                {
-                   // console.log('defending now : ',data);
-                    MySocket.emit('defend',data);
-                }
+                
+               
            }
            else 
            {
@@ -811,9 +946,20 @@ const Duel=(props)=>
                                 else
                                     finalplayerhealth=copiedmyobj.playerhealth+25;*/
 
+                                //setting stamina increment 
+                                var final_stamina=0;
+                                if(copiedmyobj.chosencharacter.stamina+3>10)
+                                  final_stamina=10;
+                                else
+                                   final_stamina=copiedmyobj.chosencharacter.stamina+3;
+                              //===========================
+
 
                                 copiedmyobj.deck[myobj.chosencharacterindex]=nextcharacter;
                                 copiedmyobj.deck[myobj.chosencharacterindex].health=finalhealth;//Setting the final health
+
+                                copiedmyobj.deck[myobj.chosencharacterindex].stamina=final_stamina;
+
                                 copiedmyobj.chosencharacter=copiedmyobj.deck[myobj.chosencharacterindex];
                                 copiedmyobj.focuspoints--;
                                 copiedmyobj.playerhealth=finalplayerhealth;
@@ -897,6 +1043,7 @@ const Duel=(props)=>
                     finalplayerhealth= copiedmyobj.playerhealth + increment;
 
                     copiedmyobj.deck[copiedmyobj.chosencharacterindex].health=finalhealth;//Setting the final health
+                    copiedmyobj.deck[copiedmyobj.chosencharacterindex].stamina=10;
                     copiedmyobj.chosencharacter=copiedmyobj.deck[myobj.chosencharacterindex];
                     copiedmyobj.focuspoints-=3;
                     copiedmyobj.playerhealth=finalplayerhealth;
@@ -1189,6 +1336,8 @@ const Duel=(props)=>
                                     theme={opponentobj.chosencharacter.theme}
                                     transformable={opponentobj.chosencharacter.transformable}
                                     next_character={opponentobj.chosencharacter.next_character}
+                                    stamina={opponentobj.chosencharacter.stamina}
+                                    stamina_threshold={opponentobj.chosencharacter.stamina_threshold}
                                     type='Duel'
                                 /></div>}
 
@@ -1216,6 +1365,8 @@ const Duel=(props)=>
                                     theme={myobj.chosencharacter.theme}
                                     transformable={myobj.chosencharacter.transformable}
                                     next_character={myobj.chosencharacter.next_character}
+                                    stamina={myobj.chosencharacter.stamina}
+                                    stamina_threshold={myobj.chosencharacter.stamina_threshold}
                                     type='Duel'
                                 />
                             </div>

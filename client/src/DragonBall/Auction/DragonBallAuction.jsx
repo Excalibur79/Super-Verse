@@ -555,6 +555,8 @@ const DragonBallAuction =(props)=>
                                     theme={AuctionObj.presentcharacter.theme}
                                     transformable={AuctionObj.presentcharacter.transformable}
                                     next_character={AuctionObj.presentcharacter.next_character}
+                                    stamina={AuctionObj.presentcharacter.stamina}
+                                    stamina_threshold={AuctionObj.presentcharacter.stamina_threshold}
                                     type='Auction'
                                 />
                            </div>
