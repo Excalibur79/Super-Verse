@@ -461,6 +461,14 @@ const Duel=(props)=>
                 {
                     var damage=Math.floor((opponentobj.chosencharacter.attack/y.chosencharacter.defence)*20);
 
+                    //If attacking card's stamina is low
+                    if(opponentobj.chosencharacter.stamina < opponentobj.chosencharacter.stamina_threshold)
+                    {
+                        var damage_hindered=Math.floor(((opponentobj.chosencharacter.stamina_threshold - opponentobj.chosencharacter.stamina)/10)*damage);
+                        damage = damage - damage_hindered;
+                    }
+                    //==================================
+
                     if(y.chosencharacter.stamina<y.chosencharacter.stamina_threshold)
                     {
                         var extradamage=Math.floor(((y.chosencharacter.stamina_threshold - y.chosencharacter.stamina)/10)*damage);
@@ -593,6 +601,14 @@ const Duel=(props)=>
                 {
                     var damage=Math.floor((myobj.chosencharacter.attack/y.chosencharacter.defence)*20);
 
+                    //if my stamina is lower than threshold
+                    if(myobj.chosencharacter.stamina < myobj.chosencharacter.stamina_threshold)
+                    {
+                        var damage_hindered=Math.floor(((myobj.chosencharacter.stamina_threshold - myobj.chosencharacter.stamina)/10)*damage);
+                        damage = damage - damage_hindered;
+                    }
+                    //=====================================
+
                     if(y.chosencharacter.stamina<y.chosencharacter.stamina_threshold)
                     {
                         var extradamage=Math.floor(((y.chosencharacter.stamina_threshold - y.chosencharacter.stamina)/10)*damage);
@@ -716,49 +732,20 @@ const Duel=(props)=>
     //Stamina System my move config===============
     useEffect(()=>
     {
-        if(mymove=='attack')
+        if(myobj)
         {
-           
-            var counter=0;
-            for(var i = 0;i<myobj.deck.length;i++)
+            if(myobj.chosencharacter.stamina<myobj.chosencharacter.stamina_threshold)
             {
-                if(myobj.deck[i].stamina<myobj.deck[i].stamina_threshold || myobj.deck[i].health==0)
-                {
-                    counter++;
-                }
-            }
-            if(counter==myobj.deck.length)
-            {
-                setTimeout(()=>
-                {
-                    setalertdata({
-                        message:"All Characters Out of Stamina!!",
-                        shown:true,
-                        type:'red'
-                    })
-                },1000)
-
-                setTimeout(()=>
-                {
-                    MySocket.emit('lostduel',{duel_id:DuelObj.duel_id});
-                    var resultdata={
-                        message1:'YOU LOST!',
-                        message2:'You lost the Tournament!',
-                        message3:'Redirecting...',
-                        shown:true
-                    } 
-                    setresult(resultdata);
-
-                    setTimeout(()=>
-                    {
-                        props.history.push('/');
-                    },9000);
-                },2000)
-                //You Lose!!
-               
+                setalertdata({
+                    message:"Warning! Stamina Low",
+                    shown:true,
+                    type:'red'
+                })
             }
            
         }
+           
+       
     },[mymove])
 
     //=======================================
@@ -788,8 +775,7 @@ const Duel=(props)=>
         {
             if(myobj.chosencharacter.health!==0)
             {
-                if((mymove=='attack' && myobj.chosencharacter.stamina>=myobj.chosencharacter.stamina_threshold) || mymove=='defend')
-                {
+               
                     setmycharacterplaced(true);
                     var player=
                     {
@@ -825,15 +811,7 @@ const Duel=(props)=>
                        // console.log('defending now : ',data);
                         MySocket.emit('defend',data);
                     }
-                }
-                else 
-                {
-                    setalertdata({
-                        message:"Stamina Low!",
-                        shown:true,
-                        type:'red'
-                    })
-                }
+               
                 
                
            }
