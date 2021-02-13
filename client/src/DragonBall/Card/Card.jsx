@@ -30,7 +30,7 @@ const Card=({name,health,attack,defence,baseprice,url,theme,transformable,next_c
     useEffect(()=>
     {
         var threshold_limit=document.getElementById('stamina_threshold');
-        console.log(threshold_limit);
+       // console.log(threshold_limit);
         if(threshold_limit)
         {
             threshold_limit.style.top=`${ (10-stamina_threshold)*10  }%`

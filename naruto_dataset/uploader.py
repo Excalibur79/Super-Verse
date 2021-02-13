@@ -21,7 +21,8 @@ for i in range(1,len(df),1):
         ob['health']=df['health'][i]
         ob['total_health']=df['total_health'][i]
         ob['base_price']=df['base_price'][i]
-       
+        ob['stamina']=df['stamina'][i]
+        ob['stamina_threshold']=df['stamina_threshold'][i]
         if df['transformable'][i]==1:
             ob['transformable']=True
         else:

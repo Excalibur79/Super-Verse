@@ -3,7 +3,7 @@ import "./Card.scss";
 import transformationarray from "../transformations";
 import {clone} from 'ramda';
 
-const Card=({name,health,attack,defence,baseprice,url,theme,transformable,next_character,type})=>
+const Card=({name,health,attack,defence,baseprice,url,theme,transformable,next_character,type,stamina,stamina_threshold})=>
 {
     const [nextform,setnextform]=useState(null);
     useEffect(()=>
@@ -27,9 +27,36 @@ const Card=({name,health,attack,defence,baseprice,url,theme,transformable,next_c
             setnextform(null);
     },[name,health])
 
+    useEffect(()=>
+    {
+        var threshold_limit=document.getElementById('stamina_threshold');
+       // console.log(threshold_limit);
+        if(threshold_limit)
+        {
+            threshold_limit.style.top=`${ (10-stamina_threshold)*10  }%`
+        }
+
+        var stamina_progress=document.getElementById('stamina_progress');
+        if(stamina_progress)
+        {
+            stamina_progress.style.height=`${stamina *10}%`;
+            stamina_progress.style.top=`${(10-stamina) *10}%`;
+        }
+    },[name,stamina,stamina_threshold])
+
+    
+
     return(
         <div className="Character">
             <div className="Top-Section" style={{"backgroundColor":`${theme}`}}>
+                <div className="Stamina">
+                    <div className="Stamina_bar">
+                        <div className="Threshold" id="stamina_threshold"></div>
+                        <div className="Stamina_progress" id="stamina_progress"></div>
+                    </div>
+                </div>
+                <div className="stamina_hover_result">{stamina}</div>
+
                 <img src={url}/>
                 {transformable && <div className="gold_circle"></div>}
             </div>

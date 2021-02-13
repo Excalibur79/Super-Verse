@@ -63,6 +63,8 @@ const Duel=(props)=>
     const [transforming,settransforming]=useState(false);
     var xx='';
     var arr1=[];var arr2=[];
+    var x;
+    var y;
 
 
     const [opponentrestore,setopponentrestore]=useState({
@@ -454,6 +456,23 @@ const Duel=(props)=>
                 setTimeout(()=>
                 {
                     var damage=Math.floor((opponentobj.chosencharacter.attack/y.chosencharacter.defence)*20);
+
+                     //If attacking card's stamina is low
+                     if(opponentobj.chosencharacter.stamina < opponentobj.chosencharacter.stamina_threshold)
+                       {
+                              var damage_hindered=Math.floor(((opponentobj.chosencharacter.stamina_threshold - opponentobj.chosencharacter.stamina)/10)*damage);
+                               damage = damage - damage_hindered;
+                        }
+                      //==================================
+                    
+                      if(y.chosencharacter.stamina<y.chosencharacter.stamina_threshold)
+                        {
+                        var extradamage=Math.floor(((y.chosencharacter.stamina_threshold - y.chosencharacter.stamina)/10)*damage);
+                        damage=damage + extradamage;
+                         }
+                    
+                    
+
                     if(y.chosencharacter.health<damage)
                     {
                         damage=y.chosencharacter.health;
@@ -489,6 +508,25 @@ const Duel=(props)=>
 
 
                     setmyobj(y);
+
+                    x=clone(opponentobj);
+                    for(var i=0;i<x.deck.length;i++)
+                    {
+                       
+                        if(i==x.chosencharacterindex)
+                        {
+                            if(x.deck[i].stamina-1>=0)
+                                x.deck[i].stamina-=1;
+                        }
+                        else 
+                        {
+                            if(x.deck[i].stamina+1<=10)
+                                x.deck[i].stamina++;
+                        }
+                    }
+                    x.chosencharacter=x.deck[x.chosencharacterindex];
+                   // console.log("Opponent has attacked and his data should be : ",x);
+                    setopponentobj(x);
                 },1000);
 
 
@@ -527,14 +565,14 @@ const Duel=(props)=>
                         {
                            var data={
                                 player1:y,
-                                player2:opponentobj,
+                                player2:x,
                                 duel_id:DuelObj.duel_id
                             }
                         }
                         else 
                         {
                            var data={
-                                player1:opponentobj,
+                                player1:x,
                                 player2:y,
                                 duel_id:DuelObj.duel_id
                             }
@@ -554,6 +592,21 @@ const Duel=(props)=>
                 setTimeout(()=>
                 {
                     var damage=Math.floor((myobj.chosencharacter.attack/y.chosencharacter.defence)*20);
+
+                     //if my stamina is lower than threshold
+                     if(myobj.chosencharacter.stamina < myobj.chosencharacter.stamina_threshold)
+                     {
+                         var damage_hindered=Math.floor(((myobj.chosencharacter.stamina_threshold - myobj.chosencharacter.stamina)/10)*damage);
+                         damage = damage - damage_hindered;
+                     }
+                     //=====================================
+ 
+                     if(y.chosencharacter.stamina<y.chosencharacter.stamina_threshold)
+                     {
+                         var extradamage=Math.floor(((y.chosencharacter.stamina_threshold - y.chosencharacter.stamina)/10)*damage);
+                         damage=damage + extradamage;
+                     }
+
                     if(y.chosencharacter.health<damage)
                     {
                         damage=y.chosencharacter.health;
@@ -683,6 +736,29 @@ const Duel=(props)=>
       
 
     },[myobj,opponentobj])
+
+
+
+    //Stamina System my move config===============
+    useEffect(()=>
+    {
+        if(myobj)
+        {
+            if(myobj.chosencharacter.stamina<myobj.chosencharacter.stamina_threshold)
+            {
+                setalertdata({
+                    message:"Warning! Stamina Low",
+                    shown:true,
+                    type:'red'
+                })
+            }
+           
+        }
+           
+       
+    },[mymove])
+
+    //=======================================
     //Functions ================
 
     const resetalert=()=>
@@ -863,9 +939,20 @@ const Duel=(props)=>
                                 else
                                     finalplayerhealth=copiedmyobj.playerhealth+25;*/
 
+                                  //setting stamina increment 
+                                  var final_stamina=0;
+                                  if(copiedmyobj.chosencharacter.stamina+3>10)
+                                    final_stamina=10;
+                                  else
+                                     final_stamina=copiedmyobj.chosencharacter.stamina+3;
+                                //===========================
+
 
                                 copiedmyobj.deck[myobj.chosencharacterindex]=nextcharacter;
                                 copiedmyobj.deck[myobj.chosencharacterindex].health=finalhealth;//Setting the final health
+
+                                copiedmyobj.deck[myobj.chosencharacterindex].stamina=final_stamina;
+
                                 copiedmyobj.chosencharacter=copiedmyobj.deck[myobj.chosencharacterindex];
                                 copiedmyobj.focuspoints--;
                                 copiedmyobj.playerhealth=finalplayerhealth;
@@ -958,6 +1045,7 @@ const Duel=(props)=>
                     finalplayerhealth= copiedmyobj.playerhealth + increment;
 
                     copiedmyobj.deck[copiedmyobj.chosencharacterindex].health=finalhealth;//Setting the final health
+                    copiedmyobj.deck[copiedmyobj.chosencharacterindex].stamina=10;
                     copiedmyobj.chosencharacter=copiedmyobj.deck[myobj.chosencharacterindex];
                     copiedmyobj.focuspoints-=3;
                     copiedmyobj.playerhealth=finalplayerhealth;
@@ -1263,6 +1351,8 @@ const Duel=(props)=>
                                     theme={opponentobj.chosencharacter.theme}
                                     transformable={opponentobj.chosencharacter.transformable}
                                     next_character={opponentobj.chosencharacter.next_character}
+                                    stamina={opponentobj.chosencharacter.stamina}
+                                    stamina_threshold={opponentobj.chosencharacter.stamina_threshold}
                                     type='Duel'
                                 /></div>}
 
@@ -1290,6 +1380,8 @@ const Duel=(props)=>
                                     theme={myobj.chosencharacter.theme}
                                     transformable={myobj.chosencharacter.transformable}
                                     next_character={myobj.chosencharacter.next_character}
+                                    stamina={myobj.chosencharacter.stamina}
+                                    stamina_threshold={myobj.chosencharacter.stamina_threshold}
                                     type='Duel'
                                 />
                             </div>

@@ -528,7 +528,7 @@ const Duel=(props)=>
                         }
                     }
                     x.chosencharacter=x.deck[x.chosencharacterindex];
-                    console.log("Opponent has attacked and his data should be : ",x);
+                   // console.log("Opponent has attacked and his data should be : ",x);
                     setopponentobj(x);
 
 
