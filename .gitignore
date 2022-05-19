@@ -1,3 +1,4 @@
 *.env
 *.txt
 *.json
+helper.js
