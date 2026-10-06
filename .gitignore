@@ -1,4 +1,6 @@
 *.env
 *.txt
 *.json
-helper.js 
+helper.js
+.DS_Store
+node_modules/
