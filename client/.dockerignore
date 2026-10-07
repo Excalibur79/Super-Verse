@@ -1,0 +1,5 @@
+node_modules
+build
+debug.log
+.eslintcache
+.DS_Store

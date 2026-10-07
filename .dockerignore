@@ -1,0 +1,10 @@
+node_modules
+client
+.git
+.env
+serviceAccount.json
+.DS_Store
+target
+test.txt
+*.ipynb
+naruto_dataset/uploader.py

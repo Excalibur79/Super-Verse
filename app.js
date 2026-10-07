@@ -49,7 +49,9 @@ app.use(express.json());
 app.use(bodyparser.urlencoded({extended:true}));
 app.use(
     cors({
-      origin: ["https://excalibur-superverse.herokuapp.com", "http://localhost:3000"], // <-- location of the react app were connecting to
+      // In Docker/EC2, nginx serves the client on the same origin, so CORS only matters for the dev server.
+      // Extra origins can be added as a comma-separated CORS_ORIGINS in .env
+      origin: (process.env.CORS_ORIGINS || "http://localhost:3000").split(","),
       
       credentials: true,
     })

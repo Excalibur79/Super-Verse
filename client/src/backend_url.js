@@ -1,5 +1,6 @@
 const backend_url =
-  process.env.NODE_ENV === "production"
-    ? "https://excalibur-superverse.herokuapp.com"
-    : "http://localhost:5001";
+  process.env.REACT_APP_BACKEND_URL ||
+  (process.env.NODE_ENV === "production"
+    ? window.location.origin
+    : "http://localhost:5001");
 export default backend_url;
