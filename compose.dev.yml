@@ -1,0 +1,35 @@
+# Hot-reload override:
+#   docker compose -f compose.yml -f compose.dev.yml up --build
+# CRA dev server on http://localhost:3000, server (nodemon) on http://localhost:5001.
+services:
+  server:
+    command: >
+      npx nodemon --legacy-watch
+      --watch app.js --watch firebase-admin.js --watch Routes
+      --watch Models --watch helpers --watch Database
+      app.js
+    ports:
+      - "5001:5001"
+    # Mount only source so the image's node_modules stays intact
+    volumes:
+      - ./app.js:/app/app.js
+      - ./firebase-admin.js:/app/firebase-admin.js
+      - ./Routes:/app/Routes
+      - ./Models:/app/Models
+      - ./helpers:/app/helpers
+      - ./Database:/app/Database
+      - ./scripts:/app/scripts
+      - ./serviceAccount.json:/app/serviceAccount.json:ro
+
+  client:
+    build:
+      target: dev
+    ports: !override
+      - "3000:3000"
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+      BROWSER: none
+    stdin_open: true
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
