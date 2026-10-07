@@ -1,0 +1,30 @@
+# EC2 stack: runs the prebuilt images from GitHub Container Registry, so nothing
+# is built on the instance (the React build alone needs ~1.5 GB RAM).
+# Needs only this file, .env and serviceAccount.json in the same directory:
+#   docker compose -f compose.ec2.yml pull
+#   docker compose -f compose.ec2.yml up -d
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  server:
+    image: ghcr.io/excalibur79/superverse-server:${IMAGE_TAG:-latest}
+    env_file: .env
+    environment:
+      PORT: "5001"
+    volumes:
+      - ./serviceAccount.json:/app/serviceAccount.json:ro
+    restart: unless-stopped
+    logging: *logging
+
+  client:
+    image: ghcr.io/excalibur79/superverse-client:${IMAGE_TAG:-latest}
+    ports:
+      - "${CLIENT_PORT:-80}:80"
+    depends_on:
+      - server
+    restart: unless-stopped
+    logging: *logging

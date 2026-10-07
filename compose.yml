@@ -1,6 +1,7 @@
-# Production stack (local and EC2): nginx serves the React build on http://localhost:${CLIENT_PORT:-3000}
+# Production-like stack built from source: nginx serves the React build on http://localhost:${CLIENT_PORT:-3000}
 # and proxies /superverse, /createorjoinuser and /socket.io to the Node server.
 # Requires .env (DATABASE = Atlas URI) and serviceAccount.json at the repo root.
+# EC2 uses compose.ec2.yml instead, which pulls prebuilt images from ghcr.io.
 services:
   server:
     build: .
@@ -16,7 +17,7 @@ services:
       context: ./client
       target: prod
     ports:
-      - "${CLIENT_PORT:-3000}:80"   # set CLIENT_PORT=80 in .env on EC2
+      - "${CLIENT_PORT:-3000}:80"
     depends_on:
       - server
     restart: unless-stopped
