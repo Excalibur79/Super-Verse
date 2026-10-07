@@ -46,7 +46,7 @@ Each push is tagged `latest` and `sha-<commit>`. You can also run the workflow b
 1. **Make the images pullable.** The first time the workflow runs, GitHub creates the two packages as private. Either:
    - Make them public: GitHub → your profile → Packages → `superverse-server` / `superverse-client` → Package settings → Change visibility → Public. The repo is public and the images hold no secrets.
    - Or keep them private and log in on the instance (step 5).
-2. **Security group:** allow inbound 22 (SSH) and 80 (HTTP), plus 443 later for HTTPS. Attach an Elastic IP.
+2. **Security group:** allow inbound 22 (SSH) and the client port: 80 by default, or whatever `CLIENT_PORT` is set to in `.env` (for example 4000). Open 443 later for HTTPS. Don't attach an Elastic IP: the scheduler Lambdas terminate and recreate the instance, and the start Lambda points the domain's A record at each new IP.
 3. **Add swap.** This is a safety net for a 1 GB / free-tier instance:
    ```sh
    sudo fallocate -l 1G /swapfile && sudo chmod 600 /swapfile
@@ -64,26 +64,26 @@ Each push is tagged `latest` and `sha-<commit>`. You can also run the workflow b
    ```
 6. **Copy the three files the instance needs.** No git clone is required. From your machine:
    ```sh
-   ssh ubuntu@<elastic-ip> 'mkdir -p ~/superverse'
-   scp compose.ec2.yml .env serviceAccount.json ubuntu@<elastic-ip>:~/superverse/
+   ssh ubuntu@<instance-ip> 'mkdir -p /datadrive/superverse'
+   scp compose.ec2.yml .env serviceAccount.json ubuntu@<instance-ip>:/datadrive/superverse/
    ```
-7. **Start the stack** (nginx listens on port 80):
+7. **Start the stack.** nginx is published on `CLIENT_PORT`, which defaults to 80. To serve on another port, add `CLIENT_PORT=4000` to `.env`:
    ```sh
-   cd ~/superverse
+   cd /datadrive/superverse
    docker compose -f compose.ec2.yml pull
    docker compose -f compose.ec2.yml up -d
    ```
    The containers restart automatically after a reboot. Logs are capped at 3 × 10 MB per container.
 8. **Allow the instance in Atlas and Firebase:**
-   - **Atlas:** Network Access → add the Elastic IP.
-   - **Firebase console:** Authentication → Settings → Authorized domains → add your domain, or the instance's public DNS name (`ec2-…compute.amazonaws.com`).
+   - **Atlas:** Network Access → allow `0.0.0.0/0`. The instance's IP changes on every start, so a fixed entry stops working.
+   - **Firebase console:** Authentication → Settings → Authorized domains → add `ankur-saha.in`. Authorized domains don't include a port, so this also covers `:4000`.
 
 ### Deploying an update
 
 1. Push to `main` and wait for the "Publish Docker images" workflow to finish.
 2. On the instance:
    ```sh
-   cd ~/superverse
+   cd /datadrive/superverse
    docker compose -f compose.ec2.yml pull && docker compose -f compose.ec2.yml up -d
    docker image prune -f
    ```
