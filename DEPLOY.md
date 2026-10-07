@@ -73,8 +73,14 @@ Each push is tagged `latest` and `sha-<commit>`. You can also run the workflow b
    docker compose -f compose.ec2.yml pull
    docker compose -f compose.ec2.yml up -d
    ```
-   The containers restart automatically after a reboot. Logs are capped at 3 × 10 MB per container.
-8. **Allow the instance in Atlas and Firebase:**
+   Logs are capped at 3 × 10 MB per container.
+8. **Start the stack on boot.** The start Lambda launches a new instance from the AMI, so install a systemd unit that brings the stack up on every boot:
+   ```sh
+   scp deploy/superverse.service ubuntu@<instance-ip>:/tmp/
+   ssh ubuntu@<instance-ip> 'sudo mv /tmp/superverse.service /etc/systemd/system/ && sudo systemctl daemon-reload && sudo systemctl enable --now docker superverse'
+   ```
+   Do this before the next stop Lambda run, because that run takes the AMI. The unit runs `up -d` and doesn't pull, so a start runs the images already on the instance. Use "Deploying an update" to ship a new version.
+9. **Allow the instance in Atlas and Firebase:**
    - **Atlas:** Network Access → allow `0.0.0.0/0`. The instance's IP changes on every start, so a fixed entry stops working.
    - **Firebase console:** Authentication → Settings → Authorized domains → add `ankur-saha.in`. Authorized domains don't include a port, so this also covers `:4000`.
 

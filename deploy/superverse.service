@@ -1,0 +1,20 @@
+# Starts the Super-Verse stack on boot, including on instances launched from the
+# AMI by the start Lambda. Install on the instance:
+#   sudo cp superverse.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now docker superverse
+[Unit]
+Description=Super-Verse (docker compose)
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/datadrive/superverse
+ExecStart=/usr/bin/docker compose -f compose.ec2.yml up -d
+ExecStop=/usr/bin/docker compose -f compose.ec2.yml down
+TimeoutStartSec=300
+
+[Install]
+WantedBy=multi-user.target
