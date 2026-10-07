@@ -49,7 +49,7 @@ app.use(express.json());
 app.use(bodyparser.urlencoded({extended:true}));
 app.use(
     cors({
-      origin: "https://excalibur-superverse.herokuapp.com", // <-- location of the react app were connecting to
+      origin: ["https://excalibur-superverse.herokuapp.com", "http://localhost:3000"], // <-- location of the react app were connecting to
       
       credentials: true,
     })
