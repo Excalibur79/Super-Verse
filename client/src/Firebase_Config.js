@@ -1,13 +1,12 @@
 import firebase from "firebase";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyB-IWUrwfkU-_JcpkreoAUUhGQcCjwuA_4",
-    authDomain: "multiplayer-card-game-301207.firebaseapp.com",
-    projectId: "multiplayer-card-game-301207",
-    storageBucket: "multiplayer-card-game-301207.appspot.com",
-    messagingSenderId: "501841594280",
-    appId: "1:501841594280:web:6e29815c0ee194e66fbf9d",
-    measurementId: "G-CVW4ZMZYRB"
+    apiKey: "AIzaSyAsrQ8cx3K1Kgn5BFa9PNcafyhNpxezN08",
+    authDomain: "superverse-ac3a1.firebaseapp.com",
+    projectId: "superverse-ac3a1",
+    storageBucket: "superverse-ac3a1.firebasestorage.app",
+    messagingSenderId: "220427494696",
+    appId: "1:220427494696:web:71f556d74640dce1d1dc1d"
   };
 
   firebase.initializeApp(firebaseConfig);
